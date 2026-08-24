@@ -988,8 +988,14 @@
     (function () {
       "use strict";
 
+      var steamImageOverrides = {
+        "3643170": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3643170/556dda2448f209b67bee696bfe722b0bae49c2e2/capsule_616x353_alt_assets_1.jpg?t=1787057939",
+        "3949040": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3949040/fc6856c47b9c695c24a2e64c60b619d7762b9717/capsule_616x353.jpg?t=1778071815",
+        "3527290": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3527290/b233cb6e95308a74fb8dac2cfc1c1cfcf14a20d5/capsule_616x353_alt_assets_3.jpg?t=1786470571"
+      };
+
       var steamImage = function (id) {
-        return "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/" + id + "/header.jpg";
+        return steamImageOverrides[id] || "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/" + id + "/header.jpg";
       };
 
       var games = [
