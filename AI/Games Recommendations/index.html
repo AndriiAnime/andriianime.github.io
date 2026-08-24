@@ -1,0 +1,1335 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100d">
+  <meta name="description" content="Персональний кооп-шортлист для трьох друзів: Boosteroid + PC Game Pass, перевірено для Києва у серпні 2026.">
+  <title>TRIO//COOP — що запускаємо сьогодні?</title>
+  <style>
+    :root {
+      --ink: #07100d;
+      --ink-2: #0d1814;
+      --panel: rgba(18, 31, 26, .82);
+      --panel-solid: #122019;
+      --paper: #eef5e8;
+      --muted: #9eaea3;
+      --line: rgba(238, 245, 232, .13);
+      --acid: #c8ff4a;
+      --acid-soft: rgba(200, 255, 74, .13);
+      --orange: #ff8a45;
+      --orange-soft: rgba(255, 138, 69, .13);
+      --blue: #77bdfb;
+      --danger: #ff6f75;
+      --radius: 22px;
+      --shadow: 0 22px 70px rgba(0, 0, 0, .28);
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 82% 7%, rgba(200, 255, 74, .11), transparent 28rem),
+        radial-gradient(circle at 5% 34%, rgba(255, 138, 69, .08), transparent 27rem),
+        var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .26;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 75%);
+      z-index: -1;
+    }
+
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    button, select { cursor: pointer; }
+    img { max-width: 100%; display: block; }
+    ::selection { background: var(--acid); color: var(--ink); }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 10px;
+      z-index: 100;
+      padding: 10px 14px;
+      color: var(--ink);
+      background: var(--acid);
+      border-radius: 10px;
+      transform: translateY(-150%);
+      transition: transform .2s ease;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .wrap { width: min(calc(100% - 36px), var(--max)); margin-inline: auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 16, 13, .78);
+      backdrop-filter: blur(18px);
+    }
+    .topbar-inner {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+    .brand-mark {
+      width: 34px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--acid);
+      border-radius: 9px 9px 9px 2px;
+      font-size: 13px;
+      transform: rotate(-4deg);
+    }
+    .brand small { color: var(--muted); font-weight: 600; letter-spacing: .06em; }
+    .topnav { display: flex; align-items: center; gap: 6px; }
+    .topnav a {
+      padding: 9px 12px;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: color .2s ease, background .2s ease;
+    }
+    .topnav a:hover, .topnav a:focus-visible { color: var(--paper); background: rgba(255,255,255,.06); }
+    .topnav .nav-cta { color: var(--ink); background: var(--acid); font-weight: 800; }
+    .topnav .nav-cta:hover, .topnav .nav-cta:focus-visible { color: var(--ink); background: #d7ff79; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, .94fr) minmax(430px, 1.06fr);
+      gap: clamp(34px, 6vw, 84px);
+      align-items: center;
+      padding-block: clamp(62px, 9vw, 118px) 74px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 22px;
+      color: var(--acid);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: currentColor;
+      border-radius: 50%;
+      box-shadow: 0 0 0 6px rgba(200,255,74,.12);
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 780px;
+      margin-bottom: 24px;
+      font-size: clamp(54px, 7.1vw, 104px);
+      line-height: .87;
+      letter-spacing: -.075em;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    h1 span {
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--acid);
+      text-shadow: 0 0 34px rgba(200,255,74,.08);
+    }
+    .hero-copy {
+      max-width: 670px;
+      color: #c4d0c6;
+      font-size: clamp(17px, 1.7vw, 21px);
+    }
+    .hero-copy strong { color: var(--paper); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 30px; }
+    .btn {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: var(--paper);
+      background: rgba(255,255,255,.04);
+      text-decoration: none;
+      font-weight: 800;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.28); background: rgba(255,255,255,.08); }
+    .btn-primary { color: var(--ink); background: var(--acid); border-color: var(--acid); }
+    .btn-primary:hover { background: #d6ff73; border-color: #d6ff73; }
+    .btn svg { width: 18px; height: 18px; }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.025);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .meta-pill b { color: var(--paper); }
+
+    .shot-grid {
+      display: grid;
+      grid-template-columns: 1.28fr .72fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+      min-height: 530px;
+      position: relative;
+    }
+    .shot-grid::before {
+      content: "LIVE PICKS";
+      position: absolute;
+      z-index: 4;
+      top: -14px;
+      right: 24px;
+      padding: 8px 12px;
+      color: var(--ink);
+      background: var(--orange);
+      border-radius: 8px 8px 8px 2px;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .14em;
+      transform: rotate(3deg);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .shot {
+      position: relative;
+      overflow: hidden;
+      margin: 0;
+      min-height: 0;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 18px;
+      background: #15251d;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+    .shot:first-child { grid-row: 1 / 3; }
+    .shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.88) contrast(1.06);
+      transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .35s ease;
+    }
+    .shot:hover img { transform: scale(1.035); filter: saturate(1.04) contrast(1.08); }
+    .shot::after {
+      content: "";
+      position: absolute;
+      inset: 40% 0 0;
+      z-index: 1;
+      background: linear-gradient(transparent, rgba(3,9,6,.93));
+    }
+    .shot figcaption {
+      position: absolute;
+      z-index: 2;
+      inset: auto 16px 15px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 850;
+      line-height: 1.1;
+    }
+    .shot figcaption small {
+      display: block;
+      margin-top: 5px;
+      color: #bdcabe;
+      font-size: 11px;
+      font-weight: 650;
+    }
+    .shot figcaption span:last-child { color: var(--acid); font-size: 18px; }
+
+    .verdict-strip {
+      margin-bottom: 92px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(115deg, rgba(200,255,74,.10), rgba(255,138,69,.055) 46%, rgba(255,255,255,.025));
+    }
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: 1.06fr repeat(3, 1fr);
+      gap: 1px;
+      overflow: hidden;
+      border-radius: 14px;
+      background: var(--line);
+    }
+    .verdict-intro, .verdict {
+      min-height: 145px;
+      padding: 22px;
+      background: rgba(7,16,13,.86);
+    }
+    .verdict-intro { display: flex; flex-direction: column; justify-content: space-between; }
+    .verdict-intro strong {
+      max-width: 260px;
+      font-size: 24px;
+      line-height: 1.04;
+      letter-spacing: -.04em;
+    }
+    .verdict-intro span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .12em; }
+    .verdict-number { color: var(--acid); font-size: 12px; font-weight: 900; letter-spacing: .12em; }
+    .verdict h3 { margin: 10px 0 7px; font-size: 18px; letter-spacing: -.025em; }
+    .verdict p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    section { scroll-margin-top: 85px; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+    .section-kicker {
+      margin-bottom: 8px;
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin-bottom: 0;
+      font-size: clamp(36px, 5vw, 66px);
+      line-height: .95;
+      letter-spacing: -.065em;
+      text-transform: uppercase;
+    }
+    .section-note { max-width: 520px; margin: 0; color: var(--muted); font-size: 15px; }
+
+    .taste-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 108px;
+    }
+    .taste {
+      position: relative;
+      min-height: 190px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.025);
+    }
+    .taste::after {
+      content: attr(data-symbol);
+      position: absolute;
+      right: 10px;
+      bottom: -36px;
+      color: rgba(255,255,255,.035);
+      font-size: 130px;
+      line-height: 1;
+      font-weight: 950;
+    }
+    .taste-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 22px;
+      color: var(--ink);
+      background: var(--acid);
+      border-radius: 11px;
+      font-weight: 950;
+    }
+    .taste.negative .taste-icon { background: var(--orange); }
+    .taste h3 { margin-bottom: 8px; font-size: 18px; letter-spacing: -.025em; }
+    .taste p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .filters-shell {
+      position: sticky;
+      top: 74px;
+      z-index: 30;
+      margin-bottom: 24px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(12, 24, 19, .92);
+      box-shadow: 0 18px 50px rgba(0,0,0,.26);
+      backdrop-filter: blur(18px);
+    }
+    .filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .filter-row + .filter-row { margin-top: 9px; }
+    .search-wrap {
+      position: relative;
+      flex: 1 1 240px;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      width: 17px;
+      height: 17px;
+      color: var(--muted);
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .search-wrap input, .select {
+      width: 100%;
+      height: 43px;
+      color: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      outline: none;
+      background: rgba(255,255,255,.04);
+    }
+    .search-wrap input { padding: 0 12px 0 40px; }
+    .select { width: auto; min-width: 174px; padding: 0 34px 0 12px; }
+    .search-wrap input:focus, .select:focus { border-color: var(--acid); box-shadow: 0 0 0 3px rgba(200,255,74,.11); }
+    .filter-label { margin-right: 2px; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .filter-chip {
+      height: 37px;
+      padding: 0 13px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.025);
+      font-size: 13px;
+      font-weight: 780;
+    }
+    .filter-chip:hover { color: var(--paper); border-color: rgba(255,255,255,.25); }
+    .filter-chip[aria-pressed="true"] {
+      color: var(--ink);
+      background: var(--acid);
+      border-color: var(--acid);
+    }
+    .surprise {
+      height: 43px;
+      padding: 0 15px;
+      color: var(--ink);
+      border: 0;
+      border-radius: 11px;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .surprise:hover { background: #ffa16c; }
+
+    .result-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 2px 15px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .result-line strong { color: var(--paper); }
+    .reset {
+      padding: 0;
+      color: var(--acid);
+      border: 0;
+      background: none;
+      font-weight: 800;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      min-height: 320px;
+    }
+    .game-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: 0 16px 42px rgba(0,0,0,.16);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,255,74,.35);
+      box-shadow: 0 24px 65px rgba(0,0,0,.28);
+    }
+    .game-card.is-highlighted { animation: highlight 1.4s ease; }
+    @keyframes highlight {
+      0%, 100% { box-shadow: 0 16px 42px rgba(0,0,0,.16); }
+      35% { box-shadow: 0 0 0 4px var(--orange), 0 24px 75px rgba(255,138,69,.28); }
+    }
+    .card-media {
+      position: relative;
+      aspect-ratio: 460 / 215;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(200,255,74,.18), transparent 45%),
+        linear-gradient(315deg, rgba(255,138,69,.16), transparent 42%),
+        #182b22;
+    }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+    .game-card:hover .card-media img { transform: scale(1.035); }
+    .card-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8,16,13,.75), transparent 50%);
+      pointer-events: none;
+    }
+    .score {
+      position: absolute;
+      z-index: 2;
+      right: 12px;
+      top: 12px;
+      width: 49px;
+      height: 49px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--acid);
+      border-radius: 50%;
+      box-shadow: 0 9px 24px rgba(0,0,0,.28);
+      font-size: 15px;
+      font-weight: 950;
+    }
+    .score::after {
+      content: "FIT";
+      position: absolute;
+      bottom: 5px;
+      font-size: 7px;
+      letter-spacing: .08em;
+    }
+    .rank {
+      position: absolute;
+      z-index: 2;
+      left: 13px;
+      bottom: 9px;
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .card-body { display: flex; flex-direction: column; flex: 1; padding: 19px; }
+    .card-topline { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+    .game-card h3 { margin: 0; font-size: 23px; line-height: 1.03; letter-spacing: -.04em; }
+    .access-badge {
+      flex: none;
+      padding: 5px 8px;
+      color: var(--acid);
+      border: 1px solid rgba(200,255,74,.24);
+      border-radius: 999px;
+      background: var(--acid-soft);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .access-badge.buy { color: var(--orange); border-color: rgba(255,138,69,.28); background: var(--orange-soft); }
+    .verdict-text { margin: 9px 0 13px; color: #d2dcd3; font-size: 14px; }
+    .facts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+    .fact {
+      padding: 5px 8px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.025);
+      font-size: 11px;
+      font-weight: 750;
+    }
+    .fit-block {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 2px;
+    }
+    .fit-row {
+      display: grid;
+      grid-template-columns: 21px 1fr;
+      gap: 8px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+    .fit-row b { color: var(--paper); }
+    .fit-icon {
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--acid);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 950;
+    }
+    .fit-row.risk .fit-icon { background: var(--orange); }
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin-top: 17px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .card-link {
+      min-height: 39px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 12px;
+      color: var(--ink);
+      background: var(--acid);
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .card-link.secondary { color: var(--paper); background: rgba(255,255,255,.06); }
+    .card-link:hover { filter: brightness(1.08); }
+    .empty {
+      grid-column: 1 / -1;
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      padding: 30px;
+      color: var(--muted);
+      border: 1px dashed rgba(255,255,255,.2);
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .audit {
+      margin-top: 110px;
+      padding-block: 68px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.018);
+    }
+    .audit-grid {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 58px;
+      align-items: start;
+    }
+    .audit h2 { font-size: clamp(34px, 4vw, 54px); }
+    .audit-copy { color: var(--muted); }
+    .audit-list { display: grid; gap: 10px; }
+    .audit-item {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      gap: 13px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(7,16,13,.46);
+      text-decoration: none;
+    }
+    .audit-item:hover { border-color: rgba(200,255,74,.34); }
+    .audit-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--acid);
+      border-radius: 10px;
+      font-weight: 950;
+    }
+    .audit-item strong { display: block; font-size: 14px; }
+    .audit-item small { display: block; color: var(--muted); font-size: 11px; }
+    .audit-item > span:last-child { color: var(--acid); }
+    .warning {
+      margin-top: 16px;
+      padding: 15px 16px;
+      color: #d6ddd7;
+      border-left: 3px solid var(--orange);
+      border-radius: 0 12px 12px 0;
+      background: var(--orange-soft);
+      font-size: 13px;
+    }
+
+    .not-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .not-item {
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.025);
+    }
+    .not-item strong { display: block; margin-bottom: 6px; color: var(--paper); font-size: 14px; }
+    .not-item span { color: var(--muted); font-size: 12px; }
+
+    footer { padding-block: 34px 44px; color: var(--muted); font-size: 12px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 22px; }
+    .footer-inner strong { color: var(--paper); }
+    .footer-inner a { color: var(--acid); }
+
+    :focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+
+    @media (max-width: 1050px) {
+      .hero { grid-template-columns: 1fr; }
+      .shot-grid { min-height: 470px; }
+      .verdict-grid { grid-template-columns: repeat(3, 1fr); }
+      .verdict-intro { grid-column: 1 / -1; min-height: auto; flex-direction: row; align-items: end; gap: 25px; }
+      .taste-grid { grid-template-columns: repeat(2, 1fr); }
+      .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .audit-grid { grid-template-columns: 1fr; gap: 30px; }
+      .not-list { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .wrap { width: min(calc(100% - 24px), var(--max)); }
+      .topbar-inner { min-height: 58px; }
+      .brand small, .topnav a:not(.nav-cta) { display: none; }
+      .topnav .nav-cta { padding: 8px 11px; font-size: 12px; }
+      .hero { padding-top: 48px; gap: 40px; }
+      h1 { font-size: clamp(48px, 16vw, 76px); }
+      .hero-copy { font-size: 16px; }
+      .shot-grid { min-height: 475px; grid-template-columns: 1fr 1fr; grid-template-rows: 1.4fr .8fr; }
+      .shot:first-child { grid-column: 1 / -1; grid-row: auto; }
+      .shot figcaption { inset: auto 11px 11px; font-size: 13px; }
+      .verdict-strip { padding: 10px; margin-bottom: 76px; }
+      .verdict-grid { grid-template-columns: 1fr; }
+      .verdict-intro { grid-column: auto; min-height: 120px; }
+      .verdict { min-height: 122px; }
+      .section-head { align-items: start; flex-direction: column; gap: 14px; }
+      .taste-grid, .game-grid, .not-list { grid-template-columns: 1fr; }
+      .taste-grid { margin-bottom: 78px; }
+      .filters-shell { position: relative; top: auto; margin-inline: -3px; }
+      .filter-row { align-items: stretch; }
+      .filter-label { width: 100%; }
+      .filter-chip { flex: 1 1 auto; }
+      .select { flex: 1 1 150px; min-width: 0; }
+      .surprise { flex: 1 1 100%; }
+      .game-card h3 { font-size: 21px; }
+      .audit { margin-top: 80px; padding-block: 52px; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#catalog">До рекомендацій</a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top" aria-label="TRIO COOP — на початок">
+        <span class="brand-mark">3×</span>
+        <span>TRIO//COOP <small>KYIV</small></span>
+      </a>
+      <nav class="topnav" aria-label="Головна навігація">
+        <a href="#logic">Логіка</a>
+        <a href="#sources">Перевірка</a>
+        <a class="nav-cta" href="#catalog">Обрати гру</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="wrap">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Київ · троє друзів · перевірено 24.08.2026</p>
+          <h1 id="hero-title">Що запускаємо <span>сьогодні?</span></h1>
+          <p class="hero-copy">
+            Не загальний топ коопів, а шортлист під вашу трійку: <strong>спільна мета й прогрес як у Valheim / Enshrouded</strong>,
+            жива сучасна дія як у Minecraft Dungeons і <strong>керований вечірній хаос як у Shift at Midnight</strong> — без повільної Diablo-археології.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#catalog">
+              Показати 25 варіантів
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 16.5 5.5 10l1.4-1.4 4.1 4.1V3h2v9.7l4.1-4.1 1.4 1.4zM5 19h14v2H5z"/></svg>
+            </a>
+            <button class="btn" id="heroRandom" type="button">🎲 Вирішити за нас</button>
+          </div>
+          <div class="hero-meta" aria-label="Умови відбору">
+            <span class="meta-pill"><b>20</b> уже в підписках</span>
+            <span class="meta-pill"><b>5</b> сильних докупівель</span>
+            <span class="meta-pill"><b>3</b> гравці без компромісів</span>
+            <span class="meta-pill">Xbox-версія в Boosteroid</span>
+          </div>
+        </div>
+
+        <div class="shot-grid" aria-label="Офіційні скріншоти рекомендованих ігор">
+          <figure class="shot">
+            <a href="https://news.xbox.com/en-us/2025/07/15/xbox-game-pass-july-2025-wave-2/" target="_blank" rel="noreferrer">
+              <img src="https://xboxwire.thesourcemediaassets.com/sites/2/2025/07/AF_TitledHeroArt_1920x1080_2-67a464cb124988f2e051-1900x1080.jpg" alt="Офіційний скріншот Abiotic Factor: науковці виживають у підземному комплексі" fetchpriority="high">
+            </a>
+            <figcaption><span>ABIOTIC FACTOR<small>Головний довгий забіг</small></span><span>01</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <a href="https://news.xbox.com/en-us/2024/09/05/warhammer-40000-space-marine-2-making-a-sequel/" target="_blank" rel="noreferrer">
+              <img src="https://xboxwire.thesourcemediaassets.com/sites/2/2024/09/Hero-f814c1931c07325856fc.jpg" alt="Офіційний скріншот Space Marine 2 з трьома космодесантниками в бою" loading="lazy">
+            </a>
+            <figcaption><span>SPACE MARINE 2<small>Екшен рівно на трьох</small></span><span>03</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <a href="https://news.xbox.com/en-us/2026/06/26/next-week-on-xbox-new-games-for-june-29-to-july-3/" target="_blank" rel="noreferrer">
+              <img src="https://xboxwire.thesourcemediaassets.com/sites/2/2026/06/nwox-hero-9ab482ab40da76292611.jpg" alt="Офіційний скріншот RV There Yet з кооперативною подорожжю на фургоні" loading="lazy">
+            </a>
+            <figcaption><span>RV THERE YET?<small>Хаос на один вечір</small></span><span>04</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <aside class="verdict-strip" aria-label="Швидкий вердикт">
+        <div class="verdict-grid">
+          <div class="verdict-intro">
+            <strong>Мій стартовий план на три різні вечори</strong>
+            <span>без довгих суперечок у Discord</span>
+          </div>
+          <article class="verdict">
+            <span class="verdict-number">ДОВГИЙ ПРОЄКТ</span>
+            <h3>Abiotic Factor</h3>
+            <p>Найкраща заміна Valheim: база, дослідження, сюжетні цілі й дивний науковий комплекс.</p>
+          </article>
+          <article class="verdict">
+            <span class="verdict-number">СЬОГОДНІ ВВЕЧЕРІ</span>
+            <h3>Roadside Research</h3>
+            <p>Найближче до кайфу Shift at Midnight: зміна, ролі, підозра, комедія — але з прогресом.</p>
+          </article>
+          <article class="verdict">
+            <span class="verdict-number">БЕЗ КРАФТУ</span>
+            <h3>Space Marine 2</h3>
+            <p>Кампанія й Operations створені для трійки. Увійшли, дали орді по зубах, вийшли.</p>
+          </article>
+        </div>
+      </aside>
+
+      <section id="logic" aria-labelledby="logic-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Модель смаку</p>
+            <h2 id="logic-title">Що вам насправді заходить</h2>
+          </div>
+          <p class="section-note">Схоже, жанр для вас менш важливий, ніж відчуття спільної справи: кожен має що робити, а сесія залишає історію або помітний прогрес.</p>
+        </div>
+        <div class="taste-grid">
+          <article class="taste" data-symbol="+">
+            <div class="taste-icon">+</div>
+            <h3>Спільний проєкт</h3>
+            <p>База, експедиція, кампанія або прокачка, де результат належить усій трійці — головний сигнал Valheim, Enshrouded і Minecraft Dungeons.</p>
+          </article>
+          <article class="taste" data-symbol="↗">
+            <div class="taste-icon">↗</div>
+            <h3>Чітка мета сесії</h3>
+            <p>Контракт, зміна, кімната, бос чи місія. Саме тому короткий Shift at Midnight спрацював, а безцільний цикл швидше відвалюється.</p>
+          </article>
+          <article class="taste" data-symbol="!">
+            <div class="taste-icon">!</div>
+            <h3>Сучасна дія + хаос</h3>
+            <p>Приємний рух, зрозумілі ролі та ситуації, про які потім смішно згадувати. Не обов’язково хорор — важливі реакції команди.</p>
+          </article>
+          <article class="taste negative" data-symbol="−">
+            <div class="taste-icon">−</div>
+            <h3>Тригери дропа</h3>
+            <p>Архаїчний клік-лут, повтор заради цифр, гринд без нових рішень, надмірна рутина або світ, який сам не підказує, навіщо ви тут.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="catalog" aria-labelledby="catalog-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Персональний рейтинг</p>
+            <h2 id="catalog-title">Кооп-радар</h2>
+          </div>
+          <p class="section-note">FIT — моя оцінка саме для вашої трійки, не «об’єктивна оцінка гри». Почніть із зелених карток; помаранчеві потребують окремої покупки.</p>
+        </div>
+
+        <div class="filters-shell" aria-label="Фільтри рекомендацій">
+          <div class="filter-row">
+            <label class="search-wrap" for="search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m19.6 21-6.3-6.3a7.5 7.5 0 1 1 1.4-1.4l6.3 6.3zM5 9.5A5.5 5.5 0 1 0 16 9.5 5.5 5.5 0 0 0 5 9.5"/></svg>
+              <span class="sr-only" hidden>Пошук гри</span>
+              <input id="search" type="search" placeholder="Знайти гру або жанр…" autocomplete="off">
+            </label>
+            <label>
+              <span class="sr-only" hidden>Доступ</span>
+              <select class="select" id="accessFilter">
+                <option value="all">Усі варіанти</option>
+                <option value="included">У наших підписках</option>
+                <option value="buy">Треба докупити</option>
+              </select>
+            </label>
+            <label>
+              <span class="sr-only" hidden>Сортування</span>
+              <select class="select" id="sortFilter">
+                <option value="fit">Спочатку найвлучніші</option>
+                <option value="short">Спочатку короткі</option>
+                <option value="name">За назвою</option>
+              </select>
+            </label>
+            <button class="surprise" id="randomPick" type="button">🎲 Обрати випадково</button>
+          </div>
+          <div class="filter-row" id="moodFilters">
+            <span class="filter-label">НАСТРІЙ:</span>
+            <button class="filter-chip" type="button" data-mood="all" aria-pressed="true">Усе</button>
+            <button class="filter-chip" type="button" data-mood="evening" aria-pressed="false">На один вечір</button>
+            <button class="filter-chip" type="button" data-mood="progress" aria-pressed="false">Довгий прогрес</button>
+            <button class="filter-chip" type="button" data-mood="mission" aria-pressed="false">Місії / забіги</button>
+            <button class="filter-chip" type="button" data-mood="horror" aria-pressed="false">Хорор / хаос</button>
+            <button class="filter-chip" type="button" data-mood="action" aria-pressed="false">Екшен</button>
+            <button class="filter-chip" type="button" data-mood="pubg" aria-pressed="false">Заміна PUBG</button>
+          </div>
+        </div>
+
+        <div class="result-line">
+          <span id="resultCount" aria-live="polite"></span>
+          <button class="reset" id="resetFilters" type="button">Скинути фільтри</button>
+        </div>
+        <div class="game-grid" id="gameGrid"></div>
+      </section>
+    </div>
+
+    <section class="audit" id="sources" aria-labelledby="audit-title">
+      <div class="wrap">
+        <div class="audit-grid">
+          <div>
+            <p class="section-kicker">Доступ перевірено</p>
+            <h2 id="audit-title">Не плутаємо «є в Game Pass» із «запуститься в Boosteroid»</h2>
+            <p class="audit-copy">
+              У головний список потрапили лише ігри, де Boosteroid підтримує саме Xbox / Microsoft Store-версію, а гра зараз є в PC Game Pass.
+              Наприклад, Grounded, Darktide і Dead Island 2 виглядають очевидними, але їхня Boosteroid-версія прив’язана до іншого магазину — підписок самих по собі недостатньо.
+            </p>
+            <div class="warning">
+              Каталоги хмарних сервісів і Game Pass змінюються. Зріз актуальний на <strong>24 серпня 2026</strong>; перед довгим завантаженням просто перевірте значок Xbox на сторінці гри в Boosteroid.
+            </div>
+          </div>
+          <div>
+            <div class="audit-list">
+              <a class="audit-item" href="https://clouddosage.com/gamelists/pc-game-pass-games-on-boosteroid/" target="_blank" rel="noreferrer">
+                <span class="audit-icon">222</span>
+                <span><strong>Актуальний перетин каталогів</strong><small>PC Game Pass × Boosteroid, автоматично оновлюваний список</small></span>
+                <span>↗</span>
+              </a>
+              <a class="audit-item" href="https://news.xbox.com/en-us/2024/03/07/xbox-boosteroid-microsoft-store-game-pass/" target="_blank" rel="noreferrer">
+                <span class="audit-icon">X</span>
+                <span><strong>Офіційна інструкція Xbox</strong><small>Як запускати Microsoft Store / PC Game Pass у Boosteroid</small></span>
+                <span>↗</span>
+              </a>
+              <a class="audit-item" href="https://www.xbox.com/en-US/xbox-game-pass/games" target="_blank" rel="noreferrer">
+                <span class="audit-icon">GP</span>
+                <span><strong>Каталог PC Game Pass</strong><small>Офіційний поточний список Xbox</small></span>
+                <span>↗</span>
+              </a>
+              <a class="audit-item" href="https://boosteroid.com/games/" target="_blank" rel="noreferrer">
+                <span class="audit-icon">B</span>
+                <span><strong>Каталог Boosteroid</strong><small>Фінальна перевірка перед стартом сесії</small></span>
+                <span>↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="not-list" aria-label="Що свідомо не рекомендовано">
+          <div class="not-item"><strong>Ще Lethal-клонів — ні</strong><span>Вірусна кооп-мета сама по собі не аргумент: у вас вона вже двічі дала лише вечір або дроп.</span></div>
+          <div class="not-item"><strong>Класичні ARPG — нижче</strong><span>SWORN лишився лише тому, що це швидший Hades-подібний забіг, а не Diablo з інвентарним бухгалтерством.</span></div>
+          <div class="not-item"><strong>Пісочниці — з попередженням</strong><span>Sea of Thieves і No Man’s Sky є, але стоять низько: без власної цілі можуть повторити сценарій «і що далі?».</span></div>
+          <div class="not-item"><strong>False positive — відсіяно</strong><span>Grounded, Darktide, Dead Island 2 та Core Keeper не рахуються як «уже оплачено», якщо Boosteroid дає лише Steam-білд.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span><strong>TRIO//COOP</strong> — приватний ігровий радар для трьох друзів із Києва.</span>
+      <span>Скріншоти: офіційні матеріали Xbox Wire. Дані перевірено 24.08.2026.</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var steamImage = function (id) {
+        return "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/" + id + "/header.jpg";
+      };
+
+      var games = [
+        {
+          rank: 1, name: "Abiotic Factor", score: 97, access: "included", players: "1–6", length: "30–60+ год", shortness: 5,
+          format: "survival / сюжет", moods: ["progress", "horror"], steam: "427410",
+          verdict: "Найкращий кандидат стати вашим наступним Valheim, але з чіткішим сюжетом і Half-Life-настроєм.",
+          why: "Спільна база, експедиції, наукові ролі, боси й постійно нові сектори комплексу.",
+          risk: "Є крафт і збирання ресурсів; якщо ніхто не любить господарство, розподіліть ролі одразу.",
+          url: "https://store.steampowered.com/app/427410/Abiotic_Factor/"
+        },
+        {
+          rank: 2, name: "Roadside Research", score: 96, access: "included", players: "1–4", length: "1 вечір → довше", shortness: 1,
+          format: "зміна / симулятор", moods: ["evening", "horror", "progress"], steam: "3643170",
+          verdict: "Найближчий збіг із тим, за що вам зайшов Shift at Midnight: спільна зміна, дивні клієнти й секрет.",
+          why: "Ви — прибульці під прикриттям: обслуговуєте АЗС, крадете дані й не підіймаєте підозру.",
+          risk: "Game Preview / Early Access: уже цілісна, але контент і баланс ще розвиваються.",
+          url: "https://store.steampowered.com/app/3643170/Roadside_Research/"
+        },
+        {
+          rank: 3, name: "Space Marine 2", score: 94, access: "included", players: "рівно 3", length: "12–25 год", shortness: 3,
+          format: "кампанія / PvE", moods: ["action", "mission"], steam: "2183900",
+          verdict: "Коли хочеться чистої сучасної дії: кампанія та Operations буквально спроєктовані навколо трійки.",
+          why: "Величезні орди, різні класи, зрозумілі місії та відчуття, що всі троє потрібні в бою.",
+          risk: "Після Battlefield може здатися ще одним шутерним циклом — але тут значно сильніший PvE-спектакль.",
+          url: "https://store.steampowered.com/app/2183900/Warhammer_40000_Space_Marine_2/"
+        },
+        {
+          rank: 4, name: "RV There Yet?", score: 92, access: "included", players: "1–4", length: "3–8 год", shortness: 1,
+          format: "фізика / пригода", moods: ["evening", "horror"], steam: "3949040",
+          verdict: "Майже гарантований один офігенний вечір: одна розвалена автівка, три голоси й катастрофічна координація.",
+          why: "Водій, лебідка, ремонт і виживання створюють природні ролі та історії без складного входу.",
+          risk: "Це короткий фізичний атракціон, не наступна гра на сто годин.",
+          url: "https://store.steampowered.com/app/3949040/RV_There_Yet/"
+        },
+        {
+          rank: 5, name: "Remnant II", score: 90, access: "included", players: "рівно 3", length: "25–50 год", shortness: 4,
+          format: "шутер / RPG", moods: ["progress", "action", "mission"], steam: "1282100",
+          verdict: "Сильний довгий кооп на трьох: лут і білди є, але бій сучасний, ручний і значно живіший за Diablo.",
+          why: "Процедурні світи, боси, секрети й взаємодоповнювані архетипи дають спільні відкриття.",
+          risk: "Soulslike-складність: якщо бісить повторення боса, ставте Survivor і не соромтеся.",
+          url: "https://store.steampowered.com/app/1282100/REMNANT_II/"
+        },
+        {
+          rank: 6, name: "Escape the Backrooms", score: 89, access: "included", players: "1–4", length: "8–14 год", shortness: 2,
+          format: "хорор / головоломки", moods: ["evening", "horror", "mission"], steam: "1943950",
+          verdict: "Структурованіший хорор за Lethal Company: 30+ рівнів, загадки та реальна ціль — вибратися.",
+          why: "Кожен вечір закриває конкретні зони; proximity voice створює потрібну комедію й паніку.",
+          risk: "Інді-шорсткість і знайомий Backrooms-мем; не чекайте преміального сюжету.",
+          url: "https://store.steampowered.com/app/1943950/Escape_the_Backrooms/"
+        },
+        {
+          rank: 7, name: "Abyssus", score: 88, access: "included", players: "1–4", length: "45–70 хв / забіг", shortness: 2,
+          format: "FPS / roguelite", moods: ["mission", "action"], steam: "1721110",
+          verdict: "Deep Rock із швидшим темпом і roguelite-білдами: зручно зайти на один забіг і все одно щось відкрити.",
+          why: "70+ вручну зроблених арен, зброя з модами та метапрогрес без безкінечного інвентарю Diablo.",
+          risk: "Забіги повторюють основну формулу; не беріть як єдину гру на місяць.",
+          url: "https://store.steampowered.com/app/1721110/Abyssus/"
+        },
+        {
+          rank: 8, name: "Escape Simulator", score: 86, access: "included", players: "трійка — ідеально", length: "30–90 хв / кімната", shortness: 1,
+          format: "escape room", moods: ["evening", "mission"], steam: "1435790",
+          verdict: "Найкращий спокійний вечір: усі троє одночасно риєтесь у кімнаті, сперечаєтесь і ловите «ага!» момент.",
+          why: "Короткі завершені сценарії плюс величезна бібліотека добрих кімнат від спільноти.",
+          risk: "Нуль бойової дії; працює лише коли сьогодні реально хочеться головоломок.",
+          url: "https://store.steampowered.com/app/1435790/Escape_Simulator/"
+        },
+        {
+          rank: 9, name: "Deep Rock Galactic", score: 85, access: "included", players: "1–4", length: "25–45 хв / місія", shortness: 2,
+          format: "місії / класи", moods: ["mission", "action"], steam: "548430",
+          verdict: "Безпечна рекомендація: чотири дуже різні ролі, компактні місії й майже нуль безцільного бігання.",
+          why: "Виберіть три класи, закрийте контракт, винесіть ресурси й отримайте помітний прогрес.",
+          risk: "Якщо грали раніше, місійний цикл зрештою стає знайомим.",
+          url: "https://store.steampowered.com/app/548430/Deep_Rock_Galactic/"
+        },
+        {
+          rank: 10, name: "STARSEEKER: Astroneer Expeditions", score: 84, access: "included", players: "1–4", length: "сесії 30–90 хв", shortness: 2,
+          format: "експедиції / космос", moods: ["mission", "progress"], steam: "3170180",
+          verdict: "Astroneer без головної проблеми пісочниці: тут є керовані експедиції, таймінг і конкретні задачі екіпажу.",
+          why: "Космічна станція, командні ролі й місії дають спільний напрям замість «копаймо кудись».",
+          risk: "Нова гра й менш перевірений контент; можливі нерівні системи та баланс.",
+          url: "https://store.steampowered.com/app/3170180/STARSEEKER_Astroneer_Expeditions/"
+        },
+        {
+          rank: 11, name: "SWORN", score: 83, access: "included", players: "1–4", length: "35–60 хв / забіг", shortness: 2,
+          format: "action roguelite", moods: ["mission", "action"], steam: "1763250",
+          verdict: "Єдиний ізометричний loot-варіант, який я вам серйозно лишаю: це радше кооперативний Hades, ніж Diablo.",
+          why: "Швидкий ручний бій, синергії благословень і завершені забіги без архаїчної кампанії.",
+          risk: "Камера й фентезійний лут візуально нагадують саме те, що ви дропнули; дайте лише один тестовий вечір.",
+          url: "https://store.steampowered.com/app/1763250/SWORN/"
+        },
+        {
+          rank: 12, name: "Gears 5", score: 82, access: "included", players: "кампанія на 3", length: "12–18 год", shortness: 3,
+          format: "сюжетний шутер", moods: ["action", "progress"], steam: "1097840",
+          verdict: "Завершена сюжетна кампанія рівно для трьох — хороший вибір, якщо вам бракує відчуття «ми це пройшли».",
+          why: "Один великий маршрут, постановочні місії й окремий Escape-режим теж під трійку.",
+          risk: "Cover-shooter старої школи; рух може здатися важчим після нових ігор.",
+          url: "https://store.steampowered.com/app/1097840/Gears_5/"
+        },
+        {
+          rank: 13, name: "Subnautica 2", score: 81, access: "included", players: "1–4", length: "20+ год зараз", shortness: 4,
+          format: "survival / океан", moods: ["progress", "horror"], steam: "1962700",
+          verdict: "Найочевидніший майбутній довгий хіт для вас: дослідження, база й небезпечний світ тепер у коопі.",
+          why: "До трьох друзів, спільне будівництво й сильне відчуття відкриття — прямо по лінії Valheim / Enshrouded.",
+          risk: "Early Access: ви знову можете швидко пройти весь поточний контент і чекати оновлень.",
+          url: "https://store.steampowered.com/app/1962700/Subnautica_2/"
+        },
+        {
+          rank: 14, name: "Towerborne", score: 79, access: "included", players: "до 4", length: "15–30+ год", shortness: 3,
+          format: "brawler / RPG", moods: ["progress", "action", "mission"], steam: "2458830",
+          verdict: "Найближче до Minecraft Dungeons за легкістю входу: кольорові зони, лут і командний beat’em up.",
+          why: "Спільні місії, класи та зрозумілий екшен без складних таблиць білдів.",
+          risk: "Відгуки змішані, а цикл може швидко здатися одноманітним — не ставте на нього весь місяць.",
+          url: "https://store.steampowered.com/app/2458830/Towerborne/"
+        },
+        {
+          rank: 15, name: "Palworld", score: 78, access: "included", players: "1–4 у групі", length: "40–100+ год", shortness: 5,
+          format: "survival / база", moods: ["progress", "action"], steam: "1623730",
+          verdict: "Якщо хочеться ще одного великого survival-проєкту: будівництво й боси тут швидші та легші за Valheim.",
+          why: "Усі працюють на одну базу, ловлять різних Pal і готують спільний рейд на босів.",
+          risk: "Багато виробничої рутини; призначте одного «архітектора», інакше Стас може відвалитися.",
+          url: "https://store.steampowered.com/app/1623730/Palworld/"
+        },
+        {
+          rank: 16, name: "Sea of Thieves", score: 76, access: "included", players: "екіпаж на 3", length: "1–3 год / рейс", shortness: 2,
+          format: "пригоди / PvPvE", moods: ["mission", "pubg", "horror"], steam: "1172620",
+          verdict: "Бригантина створена для трьох: кермо, вітрила, гармати — і природна командна метушня.",
+          why: "Tall Tales і voyages дають цілі, а зустрічі з іншими екіпажами — напругу, якої бракує після PUBG.",
+          risk: "Прогрес здебільшого косметичний; без вибраного квесту світ може здатися безцільним.",
+          url: "https://store.steampowered.com/app/1172620/Sea_of_Thieves_2024_Edition/"
+        },
+        {
+          rank: 17, name: "No Man’s Sky", score: 74, access: "included", players: "до 4 у групі", length: "50–∞ год", shortness: 5,
+          format: "survival / космос", moods: ["progress"], steam: "275850",
+          verdict: "Величезний спільний світ із базами й експедиціями — але для вас тільки з наперед обраною ціллю.",
+          why: "Експедиції структурують гру краще, ніж вільний режим, і регулярно дають новий маршрут.",
+          risk: "Найвищий ризик «і що нам тепер робити?» у всьому списку.",
+          url: "https://store.steampowered.com/app/275850/No_Mans_Sky/"
+        },
+        {
+          rank: 18, name: "State of Decay 2", score: 73, access: "included", players: "до 4", length: "25–50 год", shortness: 4,
+          format: "survival / зомбі", moods: ["progress", "action"], steam: "495420",
+          verdict: "Добра командна історія про базу й дефіцит ресурсів, якщо готові пробачити старший дизайн.",
+          why: "Кожен виїзд має мету, ризик і наслідки для спільноти хоста.",
+          risk: "Світ і основний прогрес належать хосту; гості не розвивають власну базу разом із ним.",
+          url: "https://store.steampowered.com/app/495420/State_of_Decay_2_Juggernaut_Edition/"
+        },
+        {
+          rank: 19, name: "FBC: Firebreak", score: 71, access: "included", players: "рівно 3", length: "20–35 хв / робота", shortness: 2,
+          format: "місійний FPS", moods: ["mission", "action", "horror"], steam: "2272540",
+          verdict: "Дивний бюрократичний Control-хорор, побудований саме на трьох ролях. Вартий безкоштовної перевірки.",
+          why: "Короткі роботи, аномалії та командні інструменти дають чіткий вечірній формат.",
+          risk: "Найслабше оцінена гра верхнього списку: місії можуть здатися повторюваними й сируватими.",
+          url: "https://store.steampowered.com/app/2272540/FBC_Firebreak/"
+        },
+        {
+          rank: 20, name: "Goat Simulator 3", score: 70, access: "included", players: "1–4", length: "2–6 год на кайф", shortness: 1,
+          format: "пісочниця / дурня", moods: ["evening", "horror"], steam: "850190",
+          verdict: "Кнопка «ми сьогодні не думаємо»: три кози, фізика, мініігри й достатньо абсурду на вечір.",
+          why: "Миттєвий вхід і локальні цілі створюють смішні ситуації без навчання.",
+          risk: "Майже немає довгого сенсу; не розтягуйте жарт на тиждень.",
+          url: "https://store.steampowered.com/app/850190/Goat_Simulator_3/"
+        },
+        {
+          rank: 21, name: "ARC Raiders", score: 93, access: "buy", players: "сквад рівно 3", length: "20–35 хв / рейд", shortness: 2,
+          format: "extraction PvPvE", moods: ["pubg", "action", "mission"], steam: "1808500",
+          verdict: "Найкращий платний кандидат заповнити PUBG-дірку: напруга луту, позиціонування й природний сквад із трьох.",
+          why: "Кожен рейд має ставку, план виходу й живих суперників, але команда весь час діє разом.",
+          risk: "Це не чистий кооп: інші гравці можуть забрати весь лут і настрій. Потрібно купити окремо.",
+          url: "https://store.steampowered.com/app/1808500/ARC_Raiders/"
+        },
+        {
+          rank: 22, name: "Elden Ring Nightreign", score: 88, access: "buy", players: "трійка", length: "35–50 хв / забіг", shortness: 2,
+          format: "action / roguelike", moods: ["action", "mission"], steam: "2622380",
+          verdict: "Дуже сучасна трійкова пригода: один щільний забіг, ролі, лут по дорозі й великий бос у фіналі.",
+          why: "Менше блукання, ніж в Elden Ring, і значно більше координації; формат природно ділить вечір на раунди.",
+          risk: "Жорстка Souls-складність і поразки наприкінці довгого забігу можуть бісити. Потрібно купити.",
+          url: "https://store.steampowered.com/app/2622380/ELDEN_RING_NIGHTREIGN/"
+        },
+        {
+          rank: 23, name: "HELLDIVERS 2", score: 87, access: "buy", players: "1–4", length: "25–45 хв / місія", shortness: 2,
+          format: "місійний шутер", moods: ["action", "mission"], steam: "553850",
+          verdict: "Командний PvE, де три ролі, friendly fire і паніка постійно породжують історії.",
+          why: "Чіткі операції, сильна стрілянина й стратагеми: легко ввійти на вечір, є що відкривати довше.",
+          risk: "Якщо Battlefield набрид саме через стрілянину й повтор місій, магії може не статися. Потрібно купити.",
+          url: "https://store.steampowered.com/app/553850/HELLDIVERS_2/"
+        },
+        {
+          rank: 24, name: "PEAK", score: 85, access: "buy", players: "1–4", length: "1–3 год / сходження", shortness: 1,
+          format: "кооп / скелелазіння", moods: ["evening", "horror", "mission"], steam: "3527290",
+          verdict: "Сильний «один вечір» після R.E.P.O.: тут сміх народжується з взаємодопомоги, а не зі збору металобрухту.",
+          why: "Одна гора, обмежені ресурси й можливість буквально витягнути друга з провалля.",
+          risk: "Теж вірусна коротка кооп-гра; може повторити одноразовий сценарій. Потрібно купити.",
+          url: "https://store.steampowered.com/app/3527290/PEAK/"
+        },
+        {
+          rank: 25, name: "Sons of the Forest", score: 84, access: "buy", players: "до 8", length: "25–60 год", shortness: 4,
+          format: "survival horror", moods: ["progress", "horror", "action"], steam: "1326470",
+          verdict: "Найсильніша платна ставка після Valheim / Enshrouded: спільна база, печери, сюжет і реальна загроза.",
+          why: "Будівництво інтуїтивніше, експедиції мають цілі, а хорор змушує трійку триматися разом.",
+          risk: "Знову крафт, рубання й носіння колод; якщо ви вже переситилися survival, відкладіть. Потрібно купити.",
+          url: "https://store.steampowered.com/app/1326470/Sons_Of_The_Forest/"
+        }
+      ];
+
+      var grid = document.getElementById("gameGrid");
+      var search = document.getElementById("search");
+      var accessFilter = document.getElementById("accessFilter");
+      var sortFilter = document.getElementById("sortFilter");
+      var resultCount = document.getElementById("resultCount");
+      var moodFilters = document.getElementById("moodFilters");
+      var resetFilters = document.getElementById("resetFilters");
+      var randomPick = document.getElementById("randomPick");
+      var heroRandom = document.getElementById("heroRandom");
+      var activeMood = "all";
+      var boosteroidUrl = "https://boosteroid.com/games/";
+
+      function normalise(value) {
+        return value.toLocaleLowerCase("uk").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+
+      function imageMarkup(game) {
+        return '<img src="' + steamImage(game.steam) + '" alt="Офіційне зображення гри ' + game.name + '" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">';
+      }
+
+      function cardMarkup(game) {
+        var accessText = game.access === "included" ? "Підписки ✓" : "Докупити";
+        var accessClass = game.access === "buy" ? " buy" : "";
+        var primaryLabel = game.access === "included" ? "Відкрити Boosteroid" : "Перевірити в Boosteroid";
+        return '' +
+          '<article class="game-card" id="game-' + game.rank + '" data-rank="' + game.rank + '">' +
+            '<div class="card-media">' +
+              imageMarkup(game) +
+              '<span class="rank">#' + String(game.rank).padStart(2, "0") + '</span>' +
+              '<span class="score" aria-label="Відповідність ' + game.score + ' зі 100">' + game.score + '</span>' +
+            '</div>' +
+            '<div class="card-body">' +
+              '<div class="card-topline">' +
+                '<h3>' + game.name + '</h3>' +
+                '<span class="access-badge' + accessClass + '">' + accessText + '</span>' +
+              '</div>' +
+              '<p class="verdict-text">' + game.verdict + '</p>' +
+              '<div class="facts">' +
+                '<span class="fact">👥 ' + game.players + '</span>' +
+                '<span class="fact">⏱ ' + game.length + '</span>' +
+                '<span class="fact">' + game.format + '</span>' +
+              '</div>' +
+              '<div class="fit-block">' +
+                '<div class="fit-row"><span class="fit-icon">+</span><span><b>Чому зайде:</b> ' + game.why + '</span></div>' +
+                '<div class="fit-row risk"><span class="fit-icon">!</span><span><b>Ризик дропа:</b> ' + game.risk + '</span></div>' +
+              '</div>' +
+              '<div class="card-actions">' +
+                '<a class="card-link" href="' + boosteroidUrl + '" target="_blank" rel="noreferrer">' + primaryLabel + '</a>' +
+                '<a class="card-link secondary" href="' + game.url + '" target="_blank" rel="noreferrer" aria-label="Деталі гри ' + game.name + '">Деталі ↗</a>' +
+              '</div>' +
+            '</div>' +
+          '</article>';
+      }
+
+      function filteredGames() {
+        var query = normalise(search.value.trim());
+        var access = accessFilter.value;
+        var list = games.filter(function (game) {
+          var searchable = normalise([game.name, game.format, game.verdict, game.why].join(" "));
+          var moodMatch = activeMood === "all" || game.moods.indexOf(activeMood) !== -1;
+          var accessMatch = access === "all" || game.access === access;
+          return moodMatch && accessMatch && (!query || searchable.indexOf(query) !== -1);
+        });
+
+        if (sortFilter.value === "name") {
+          list.sort(function (a, b) { return a.name.localeCompare(b.name, "uk"); });
+        } else if (sortFilter.value === "short") {
+          list.sort(function (a, b) { return a.shortness - b.shortness || b.score - a.score; });
+        } else {
+          list.sort(function (a, b) { return b.score - a.score || a.rank - b.rank; });
+        }
+        return list;
+      }
+
+      function render() {
+        var list = filteredGames();
+        if (!list.length) {
+          grid.innerHTML = '<div class="empty"><div><strong>Нічого не знайшлося.</strong><br>Спробуйте інший настрій або скиньте фільтри.</div></div>';
+        } else {
+          grid.innerHTML = list.map(cardMarkup).join("");
+        }
+        var included = list.filter(function (game) { return game.access === "included"; }).length;
+        var bought = list.length - included;
+        resultCount.innerHTML = 'Показано <strong>' + list.length + '</strong> · у підписках <strong>' + included + '</strong>' + (bought ? ' · докупити <strong>' + bought + '</strong>' : "");
+      }
+
+      function setMood(value) {
+        activeMood = value;
+        Array.prototype.forEach.call(moodFilters.querySelectorAll("[data-mood]"), function (button) {
+          button.setAttribute("aria-pressed", String(button.getAttribute("data-mood") === value));
+        });
+        render();
+      }
+
+      function chooseRandom() {
+        var list = filteredGames();
+        if (!list.length) return;
+        var pick = list[Math.floor(Math.random() * list.length)];
+        var card = document.getElementById("game-" + pick.rank);
+        if (!card) {
+          search.value = "";
+          accessFilter.value = "all";
+          setMood("all");
+          card = document.getElementById("game-" + pick.rank);
+        }
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+          card.classList.remove("is-highlighted");
+          void card.offsetWidth;
+          card.classList.add("is-highlighted");
+        }
+      }
+
+      search.addEventListener("input", render);
+      accessFilter.addEventListener("change", render);
+      sortFilter.addEventListener("change", render);
+      moodFilters.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-mood]");
+        if (button) setMood(button.getAttribute("data-mood"));
+      });
+      resetFilters.addEventListener("click", function () {
+        search.value = "";
+        accessFilter.value = "all";
+        sortFilter.value = "fit";
+        setMood("all");
+        search.focus();
+      });
+      randomPick.addEventListener("click", chooseRandom);
+      heroRandom.addEventListener("click", function () {
+        document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
+        window.setTimeout(chooseRandom, 450);
+      });
+
+      render();
+    }());
+  </script>
+</body>
+</html>
