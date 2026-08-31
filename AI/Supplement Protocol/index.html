@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1211">
+  <meta name="description" content="Персональний протокол добавок Андрія: поточний стек і 30-денний Blueprint.">
+  <title>Supplement Protocol — Andrii</title>
+  <style>
+    :root {
+      --bg: #09100f;
+      --bg-soft: #101a18;
+      --panel: rgba(19, 31, 28, .88);
+      --panel-solid: #14211e;
+      --text: #f1f6f1;
+      --muted: #9baaa5;
+      --line: rgba(236, 245, 239, .12);
+      --mint: #78ecc5;
+      --lime: #c8ff6a;
+      --cyan: #7fd8ff;
+      --violet: #b8a4ff;
+      --amber: #ffc66f;
+      --red: #ff8589;
+      --max: 1180px;
+      --radius: 24px;
+      --shadow: 0 28px 90px rgba(0, 0, 0, .32);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 86% 0%, rgba(120, 236, 197, .13), transparent 30rem),
+        radial-gradient(circle at 0% 42%, rgba(127, 216, 255, .08), transparent 27rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .22;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .028) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    a { color: inherit; }
+    ::selection { color: #09100f; background: var(--mint); }
+
+    .wrap { width: min(calc(100% - 32px), var(--max)); margin-inline: auto; }
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      padding: 10px 14px;
+      color: #09100f;
+      background: var(--mint);
+      border-radius: 10px;
+      transform: translateY(-160%);
+      transition: transform .2s ease;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(9, 16, 15, .78);
+      backdrop-filter: blur(18px);
+    }
+    .topbar-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 750; letter-spacing: -.02em; }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: #09100f;
+      background: linear-gradient(135deg, var(--lime), var(--mint));
+      border-radius: 11px;
+      box-shadow: 0 10px 30px rgba(120, 236, 197, .18);
+    }
+    .top-actions { display: flex; align-items: center; gap: 8px; }
+    .icon-button {
+      min-height: 38px;
+      padding: 8px 12px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(255, 255, 255, .035);
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .icon-button:hover { color: var(--text); border-color: rgba(120, 236, 197, .38); }
+
+    .hero { padding: 72px 0 28px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--mint);
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; }
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-size: clamp(2.8rem, 8vw, 6.6rem);
+      line-height: .94;
+      letter-spacing: -.075em;
+      text-wrap: balance;
+    }
+    .hero-copy {
+      max-width: 690px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.16rem);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      color: #cdd8d4;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .035);
+      font-size: .84rem;
+    }
+    .meta-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 16px var(--mint); }
+
+    .protocol-switcher {
+      position: sticky;
+      top: 82px;
+      z-index: 12;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 32px 0 24px;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(16, 26, 24, .82);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 50px rgba(0, 0, 0, .18);
+    }
+    .protocol-tab {
+      min-height: 56px;
+      padding: 10px 16px;
+      color: var(--muted);
+      text-align: left;
+      border: 0;
+      border-radius: 13px;
+      background: transparent;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .protocol-tab strong { display: block; color: inherit; font-size: .98rem; }
+    .protocol-tab span { display: block; margin-top: 2px; font-size: .76rem; opacity: .72; }
+    .protocol-tab.active {
+      color: #08100e;
+      background: linear-gradient(135deg, var(--lime), var(--mint));
+      box-shadow: 0 12px 34px rgba(120, 236, 197, .16);
+    }
+
+    .protocol-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(260px, .7fr);
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    .intro-card, .focus-card, .schedule, .supplements, .callout {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .intro-card { padding: clamp(24px, 4vw, 42px); border-radius: var(--radius); }
+    .protocol-kicker { color: var(--mint); font-size: .76rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    h2 { margin: 10px 0 12px; font-size: clamp(2rem, 4vw, 3.6rem); line-height: 1; letter-spacing: -.055em; }
+    .protocol-description { max-width: 640px; margin: 0; color: var(--muted); }
+    .notice {
+      margin-top: 24px;
+      padding: 14px 16px;
+      color: #dce8e3;
+      border-left: 3px solid var(--mint);
+      background: rgba(120, 236, 197, .07);
+      border-radius: 0 12px 12px 0;
+      font-size: .9rem;
+    }
+    .focus-card { display: grid; gap: 1px; overflow: hidden; border-radius: var(--radius); }
+    .focus-item { padding: 18px 20px; background: rgba(255, 255, 255, .025); }
+    .focus-item + .focus-item { border-top: 1px solid var(--line); }
+    .focus-label { display: block; color: var(--muted); font-size: .72rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+    .focus-value { display: block; margin-top: 5px; font-size: 1.08rem; font-weight: 740; letter-spacing: -.02em; }
+
+    .section { margin-top: 18px; }
+    .section-title-row { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    .section-title { margin: 0; font-size: clamp(1.45rem, 3vw, 2.25rem); letter-spacing: -.045em; }
+    .section-note { margin: 0; color: var(--muted); font-size: .84rem; }
+
+    .schedule {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow: hidden;
+      border-radius: var(--radius);
+    }
+    .schedule-column { min-width: 0; padding: 22px; }
+    .schedule-column + .schedule-column { border-left: 1px solid var(--line); }
+    .schedule-icon { font-size: 1.28rem; }
+    .schedule-label { margin: 9px 0 15px; color: var(--muted); font-size: .73rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .schedule-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .schedule-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr); gap: 9px; align-items: start; font-size: .88rem; }
+    .schedule-list li::before { content: ""; width: 7px; height: 7px; margin-top: .43rem; border-radius: 50%; background: var(--mint); }
+    .schedule-list span { color: var(--muted); }
+
+    .filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .filter-button {
+      padding: 8px 12px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .025);
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .filter-button:hover, .filter-button.active { color: var(--text); border-color: rgba(120, 236, 197, .4); background: rgba(120, 236, 197, .08); }
+
+    .supplements { padding: 10px; border-radius: var(--radius); }
+    .supplement-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .supplement-card {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 15px;
+      min-height: 190px;
+      padding: 19px;
+      border: 1px solid transparent;
+      border-radius: 17px;
+      background: rgba(255, 255, 255, .032);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .supplement-card:hover { transform: translateY(-2px); border-color: var(--line); background: rgba(255, 255, 255, .047); }
+    .supplement-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(120, 236, 197, .09);
+      font-size: 1.25rem;
+    }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .supplement-name { margin: 0; font-size: 1rem; line-height: 1.28; letter-spacing: -.018em; }
+    .product-link { text-decoration: none; }
+    .product-link:hover { color: var(--mint); }
+    .status {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: .67rem;
+      font-weight: 800;
+      letter-spacing: .035em;
+      white-space: nowrap;
+    }
+    .status-active { color: var(--mint); background: rgba(120, 236, 197, .1); }
+    .status-buy { color: var(--cyan); background: rgba(127, 216, 255, .1); }
+    .status-optional { color: var(--amber); background: rgba(255, 198, 111, .1); }
+    .status-need { color: var(--violet); background: rgba(184, 164, 255, .11); }
+    .status-pause { color: #ffad71; background: rgba(255, 157, 90, .1); }
+    .status-stop { color: var(--red); background: rgba(255, 133, 137, .1); }
+    .dose { margin: 13px 0 0; font-size: .91rem; font-weight: 680; }
+    .when { margin: 4px 0 0; color: var(--muted); font-size: .82rem; }
+    .ai-note { margin: 14px 0 0; padding-top: 13px; color: #b7c4bf; border-top: 1px solid var(--line); font-size: .78rem; }
+    .ai-note strong { color: #dbe6e1; }
+    .empty-state { padding: 38px 20px; color: var(--muted); text-align: center; }
+
+    .callout {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 16px;
+      margin: 18px 0 0;
+      padding: 22px;
+      border-radius: var(--radius);
+    }
+    .callout-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px; background: rgba(200, 255, 106, .1); font-size: 1.4rem; }
+    .callout h3 { margin: 1px 0 7px; font-size: 1.06rem; }
+    .callout p { margin: 0; color: var(--muted); font-size: .88rem; }
+
+    footer { padding: 56px 0 42px; color: var(--muted); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-top: 22px; border-top: 1px solid var(--line); }
+    .footer-copy { max-width: 630px; margin: 0; font-size: .8rem; }
+    .notion-link { color: var(--mint); text-underline-offset: 3px; white-space: nowrap; }
+
+    @media (max-width: 860px) {
+      .protocol-head { grid-template-columns: 1fr; }
+      .focus-card { grid-template-columns: repeat(3, 1fr); }
+      .focus-item + .focus-item { border-top: 0; border-left: 1px solid var(--line); }
+      .schedule { grid-template-columns: repeat(2, 1fr); }
+      .schedule-column:nth-child(3) { border-left: 0; border-top: 1px solid var(--line); }
+      .schedule-column:nth-child(4) { border-top: 1px solid var(--line); }
+    }
+
+    @media (max-width: 680px) {
+      .hero { padding-top: 48px; }
+      .brand-text { display: none; }
+      .topbar-inner { min-height: 60px; }
+      .protocol-switcher { top: 70px; }
+      .protocol-tab { min-height: 52px; padding: 8px 11px; }
+      .protocol-tab span { display: none; }
+      .focus-card, .schedule, .supplement-grid { grid-template-columns: 1fr; }
+      .focus-item + .focus-item { border-left: 0; border-top: 1px solid var(--line); }
+      .schedule-column + .schedule-column,
+      .schedule-column:nth-child(3),
+      .schedule-column:nth-child(4) { border-left: 0; border-top: 1px solid var(--line); }
+      .supplement-card { min-height: auto; grid-template-columns: 38px minmax(0, 1fr); padding: 16px; }
+      .supplement-icon { width: 38px; height: 38px; border-radius: 12px; }
+      .card-top { display: block; }
+      .status { display: inline-block; margin-top: 8px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .icon-button span { display: none; }
+    }
+
+    @media print {
+      :root { --text: #102018; --muted: #52615a; --line: rgba(16, 32, 24, .15); }
+      body { background: white; }
+      body::before, .topbar, .protocol-switcher, .filter-row, footer { display: none !important; }
+      .hero { padding: 20px 0; }
+      h1 { font-size: 3.6rem; }
+      .intro-card, .focus-card, .schedule, .supplements, .callout { box-shadow: none; background: white; break-inside: avoid; }
+      .supplement-card { background: #f5f8f6; break-inside: avoid; }
+      .section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">До протоколу</a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <span class="brand-text">Andrii · Supplement Protocol</span>
+      </div>
+      <div class="top-actions">
+        <button class="icon-button" type="button" id="printButton" title="Надрукувати поточний режим">↗ <span>Друк / PDF</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section class="hero" aria-labelledby="pageTitle">
+      <div class="eyebrow">Personal health system</div>
+      <h1 id="pageTitle">Стек без зайвого шуму.</h1>
+      <p class="hero-copy">Два режими — поточний протокол і 30-денний Blueprint. Тут тільки те, що приймати, коли приймати й що не дублювати.</p>
+      <div class="hero-meta">
+        <span class="meta-chip"><span class="meta-dot"></span> 100% vegan protocol</span>
+        <span class="meta-chip">Оновлено 31.08.2026</span>
+        <span class="meta-chip">Nordic Omega · 1 капсула/день</span>
+      </div>
+    </section>
+
+    <nav class="protocol-switcher" aria-label="Оберіть протокол">
+      <button class="protocol-tab active" type="button" data-protocol="current" aria-pressed="true">
+        <strong>01 · Зараз</strong>
+        <span>До переходу на Blueprint</span>
+      </button>
+      <button class="protocol-tab" type="button" data-protocol="blueprint" aria-pressed="false">
+        <strong>02 · Blueprint</strong>
+        <span>Тестовий цикл на 30 днів</span>
+      </button>
+    </nav>
+
+    <section class="protocol-head" aria-live="polite">
+      <article class="intro-card">
+        <div class="protocol-kicker" id="protocolKicker"></div>
+        <h2 id="protocolTitle"></h2>
+        <p class="protocol-description" id="protocolDescription"></p>
+        <div class="notice" id="protocolNotice"></div>
+      </article>
+      <aside class="focus-card" id="focusCard" aria-label="Ключові орієнтири"></aside>
+    </section>
+
+    <section class="section" aria-labelledby="scheduleTitle">
+      <div class="section-title-row">
+        <div>
+          <h2 class="section-title" id="scheduleTitle">Ритм дня</h2>
+          <p class="section-note">Короткий сценарій без необхідності читати всю таблицю.</p>
+        </div>
+      </div>
+      <div class="schedule" id="schedule"></div>
+    </section>
+
+    <section class="section" aria-labelledby="listTitle">
+      <div class="section-title-row">
+        <div>
+          <h2 class="section-title" id="listTitle">Увесь протокол</h2>
+          <p class="section-note" id="listCount"></p>
+        </div>
+      </div>
+      <div class="filter-row" role="group" aria-label="Фільтр добавок">
+        <button class="filter-button active" type="button" data-filter="all">Усі</button>
+        <button class="filter-button" type="button" data-filter="active">Приймати</button>
+        <button class="filter-button" type="button" data-filter="conditional">За умовою</button>
+        <button class="filter-button" type="button" data-filter="pause">Пауза / стоп</button>
+      </div>
+      <div class="supplements">
+        <div class="supplement-grid" id="supplementGrid"></div>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <div class="callout-icon" aria-hidden="true">⌁</div>
+      <div>
+        <h3>Правило одного перемикача</h3>
+        <p id="bottomRule"></p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <p class="footer-copy">Персональний довідник, а не медичний діагноз. Залізо залишається на паузі до аналізів; для стійкого болю або нестабільності гомілкостопа потрібна оцінка фізіотерапевта чи ортопеда.</p>
+      <a class="notion-link" id="notionLink" href="#" target="_blank" rel="noreferrer">Відкрити протокол у Notion ↗</a>
+    </div>
+  </footer>
+
+  <script>
+    const protocols = {
+      current: {
+        kicker: "01 · CURRENT MODE",
+        title: "До Blueprint",
+        description: "Допиваємо наявне, додаємо вже замовлені позиції й не ускладнюємо стек. База — білок, креатин, EPA/DHA, магній, B12 та надійне джерело йоду.",
+        notice: "Nordic Naturals замінює Deva майже один-в-один: 292,5 мг EPA+DHA проти 300 мг. Схема — 1 капсула щодня, а не 2.",
+        notion: "https://app.notion.com/p/366fc194281345c494d7226751ce2a23",
+        bottomRule: "Поточний стек не потрібно «підсилювати» випадковими комплексами. Нову добавку залишаємо лише тоді, коли для неї є конкретна мета й помітний результат через визначений термін.",
+        focus: [
+          ["Omega-3", "1 капсула / день"],
+          ["Creatine", "3–5 г / день"],
+          ["Protein", "≈135–150 г / день"]
+        ],
+        schedule: [
+          { icon: "☀", label: "Ранок", items: ["Йод 150 мкг з їжею", "B12 spray — лише 2× на тиждень"] },
+          { icon: "◐", label: "Основна їжа", items: ["Nordic Omega — 1 капсула", "Glucosamine — 3 таблетки, тест 8–12 тижнів", "Кальцій — лише якщо не добрав із їжі"] },
+          { icon: "↗", label: "Гнучко", items: ["Креатин 3–5 г у смузі", "Протеїн 1–2 порції за раціоном", "L-theanine 200 мг лише з енергетиком"] },
+          { icon: "☾", label: "Вечір", items: ["Магній 200 мг", "Гліцин 3 г за 30–60 хв до сну", "Мелатонін 500 мкг тільки за потреби"] }
+        ],
+        supplements: [
+          { name: "Deva Vegan Glucosamine MSM-CMO-Turmeric", dose: "3 таблетки · 1500 мг glucosamine HCl + 750 мг MSM", when: "З їжею · щодня, тест 8–12 тижнів", decision: "Опційно", status: "optional", icon: "◌", note: "Без хондроїтину. Продовжувати лише за чітким вимірюваним ефектом; це не лікування гострої травми.", link: "https://ua.iherb.com/pr/deva-vegan-glucosamine-msm-cmo-turmeric-90-tablets/10893" },
+          { name: "Окрема куркума / куркумін", dose: "0", when: "Не приймати · не докуповувати", decision: "Припинити", status: "stop", icon: "×", note: "Відчутної користі не було. У Deva є невелика кількість куркуми — окремо дублювати не потрібно.", link: "https://www.iherb.com/pr/nature-s-craft-turmeric-curcumin-with-bioperine-90-capsules/142407" },
+          { name: "NOW Foods Glycine powder", dose: "3 г · приблизно ¾ рівної чайної ложки", when: "За 30–60 хв до сну · щодня, якщо допомагає", decision: "Продовжувати", status: "active", icon: "☾", note: "Фактична порція порошку; не плутати з дозуванням капсул.", link: "https://www.iherb.com/pr/now-foods-glycine-pure-powder-1-lb-454-g/615" },
+          { name: "Vegan protein BioTech", dose: "За потреби до сумарно ≈135–150 г білка на день", when: "У смузі або після тренування · 1–2 порції", decision: "Продовжувати", status: "active", icon: "P", note: "Друга порція не обов’язкова, якщо денна ціль уже закривається їжею.", link: "" },
+          { name: "Solgar Chelated Iron", dose: "25 мг · зараз 0", when: "Не приймати до перевірки аналізів", decision: "Пауза до аналізів", status: "pause", icon: "Fe", note: "Перед поверненням: CBC, ferritin, transferrin saturation або призначення лікаря.", link: "https://www.iherb.com/pr/solgar-chelated-iron-100-tablets-25-mg-per-tablet/48553" },
+          { name: "Doctor's Best High Absorption Magnesium", dose: "200 мг · 2 таблетки", when: "Увечері з їжею або перед сном · щодня", decision: "Продовжувати", status: "active", icon: "Mg", note: "Не переходити автоматично на 400 мг із добавки: це вище UL 350 мг для supplemental magnesium.", link: "https://www.iherb.com/pr/doctor-s-best-high-absorption-magnesium-120-tablets-100-mg-per-tablet/15" },
+          { name: "Swanson Melatonin Extra Low Dose", dose: "500 мкг · 1 капсула", when: "За 30–60 хв до сну · лише за потреби", decision: "За потреби", status: "need", icon: "☾", note: "Рідке використання раз на тиждень або рідше — нормальна схема. Дозу не підвищувати автоматично.", link: "https://www.iherb.com/pr/swanson-vitamins-melatonin-extra-low-dose-500-mcg-60-vegan-caps/118320" },
+          { name: "California Gold Nutrition LactoBif 5", dose: "1 капсула", when: "Щодня до завершення банки", decision: "Опційно", status: "optional", icon: "◎", note: "Можна допити, якщо добре переноситься; без конкретної ШКТ-мети постійно не докуповувати.", link: "https://www.iherb.com/pr/california-gold-nutrition-lactobif-5-probiotics-5-billion-cfu-60-veggie-capsules/64006" },
+          { name: "NOW Foods Kelp — iodine", dose: "150 мкг · 1 таблетка", when: "Зі сніданком або іншою їжею · щодня до Blueprint", decision: "Продовжувати", status: "active", icon: "I", note: "За відсутності надійного щоденного джерела 1–2 рази на тиждень недостатньо. На Blueprint окремий йод прибрати.", link: "https://ua.iherb.com/pr/now-foods-kelp-150-mcg-200-tablets/685" },
+          { name: "NOW Foods B-12 Liposomal Spray", dose: "1000 мкг · 1 розпилення", when: "Будь-коли · 2 рази на тиждень", decision: "Докупити", status: "buy", icon: "B12", note: "Fortified foods і Monster — бонус, але не єдине надійне джерело.", link: "https://ua.iherb.com/pr/now-foods-b-12-liposomal-spray-2-fl-oz-59-ml/12465" },
+          { name: "PlantFusion Vegan Calcium", dose: "333 мг · 1 таблетка", when: "Лише в дні, коли їжею не набирається ≈1000 мг", decision: "За потреби", status: "need", icon: "Ca", note: "Два fortified-смузі, чіа й кунжут можуть уже закривати більшу частину потреби.", link: "https://www.iherb.com/pr/plantfusion-vegan-planet-based-calcium-90-tablets-333-mg-per-tablet/102768" },
+          { name: "Ancient Nutrition Vegetarian Collagen Peptides", dose: "0", when: "Припинити", decision: "Припинити", status: "stop", icon: "!", note: "Не веганський: містить fermented eggshell membrane collagen. Це реальний інгредієнт яйця, а не сліди.", link: "https://www.iherb.com/pr/ancient-nutrition-vegetarian-collagen-peptides-naturally-flavored-9-9-oz-280-g/115164" },
+          { name: "Nordic Naturals Algae Omega", dose: "1 капсула · 292,5 мг EPA+DHA", when: "З основним прийомом їжі, що містить жир · щодня", decision: "Продовжувати", status: "active", icon: "Ω", note: "195 мг DHA + 97,5 мг EPA. Майже та сама базова доза, що була в Deva; банка вистачає на 120 днів.", link: "https://ua.iherb.com/pr/nordic-naturals-algae-omega-120-soft-gels-357-5-mg-per-softgel/106320" },
+          { name: "California Gold Nutrition L-Theanine AlphaWave", dose: "200 мг · 1 капсула", when: "Одночасно з енергетиком, бажано до 14:00", decision: "Докупити", status: "buy", icon: "α", note: "Лише у дні з енергетиком, максимум 1 раз/день. Не компенсує вплив пізнього кофеїну на сон.", link: "https://ua.iherb.com/pr/california-gold-nutrition-l-theanine-featuring-alphawave-200-mg-60-veggie-capsules/83280" },
+          { name: "Mutant Creatine Monohydrate", dose: "3–5 г", when: "Будь-коли, зручніше зі смузі · щодня", decision: "Продовжувати", status: "active", icon: "Cr", note: "Без циклів. Перевірити фактичні грами у власній мірній ложці.", link: "" }
+        ]
+      },
+
+      blueprint: {
+        kicker: "02 · 30-DAY TEST",
+        title: "Blueprint Protocol",
+        description: "Тестуємо три замовлені продукти Blueprint як один 30-денний блок. Прибираємо дублікати, залишаємо окремо лише те, чого в наборі немає або не вистачає.",
+        notice: "Essential Capsules + Longevity Mix вже закривають B12, йод, пробіотик, кальцій, L-theanine, частину магнію, гліцину, креатину й glucosamine. Не дублювати їх за інерцією.",
+        notion: "https://app.notion.com/p/aa5f4e8673184f1ebd1d2eee9a6d8060",
+        bottomRule: "Перший тиждень Blueprint — тільки базовий набір плюс Nordic Omega, білок і доведення креатину до 3–5 г. Магній та гліцин додаємо лише після оцінки сну й переносимості.",
+        focus: [
+          ["Cycle", "30 днів"],
+          ["Core", "3 продукти Blueprint"],
+          ["Separate omega", "1 капсула / день"]
+        ],
+        schedule: [
+          { icon: "☀", label: "Ранок із їжею", items: ["Essential Capsules — 2 капсули", "Longevity Mix — 1 мірна ложка", "Advanced Antioxidants — 1 капсула"] },
+          { icon: "◐", label: "Основна їжа", items: ["Nordic Omega — 1 капсула", "Окремі B12, йод і пробіотик — пауза"] },
+          { icon: "↗", label: "Гнучко", items: ["Додатковий креатин 0,5–2,5 г", "Протеїн 1–2 порції за раціоном", "Кальцій — тільки у день з низьким надходженням"] },
+          { icon: "☾", label: "Вечір", items: ["Магній +100 мг за потреби", "Гліцин до 1,8 г — лише після 1-го тижня", "Мелатонін 500 мкг тільки за потреби"] }
+        ],
+        supplements: [
+          { name: "Blueprint Essential Capsules", dose: "2 капсули", when: "Вранці зі сніданком · щодня 30 днів", decision: "Продовжувати", status: "active", icon: "E", note: "Вже дає B12 125 мкг, йод 200 мкг, D3 2000 IU, цинк 15 мг і L. acidophilus 4 млрд CFU.", link: "https://blueprint.bryanjohnson.com/products/essentials-capsules" },
+          { name: "Blueprint Longevity Mix — Blood Orange", dose: "1 мірна ложка · 14,8 г у воді", when: "Вранці зі сніданком · щодня 30 днів", decision: "Продовжувати", status: "active", icon: "L", note: "Creatine 2,5 г, magnesium 150 мг, calcium 400 мг, glycine 1,2 г, L-theanine 200 мг, glucosamine sulfate 750 мг.", link: "https://blueprint.bryanjohnson.com/products/longevity-blend-multinutrient-drink-mix-blood-orange-flavor" },
+          { name: "Blueprint Advanced Antioxidants", dose: "1 капсула", when: "Вранці з жирною їжею · щодня 30 днів", decision: "Продовжувати", status: "active", icon: "A", note: "Високі дози K1/K2. Не поєднувати без лікаря з warfarin або іншою vitamin-K-чутливою терапією.", link: "https://blueprint.bryanjohnson.com/products/advanced-antioxidants" },
+          { name: "Nordic Naturals Algae Omega", dose: "1 капсула · 292,5 мг EPA+DHA", when: "З основним прийомом їжі, що містить жир · щодня", decision: "Продовжувати", status: "active", icon: "Ω", note: "У трьох продуктах Blueprint EPA/DHA немає. Однієї капсули достатньо; не переходити автоматично на дві.", link: "https://ua.iherb.com/pr/nordic-naturals-algae-omega-120-soft-gels-357-5-mg-per-softgel/106320" },
+          { name: "Mutant Creatine Monohydrate — доповнення", dose: "Ще 0,5–2,5 г до сумарно 3–5 г/день", when: "Разом із Mix або іншим прийомом · щодня", decision: "Продовжувати", status: "active", icon: "Cr", note: "Longevity Mix уже містить 2,5 г. Якщо ложка Mutant = 5 г, використовувати приблизно половину.", link: "" },
+          { name: "Vegan protein BioTech", dose: "За потреби до сумарно ≈135–150 г білка на день", when: "У смузі або після тренування · 1–2 порції", decision: "Продовжувати", status: "active", icon: "P", note: "Blueprint не замінює повноцінний білок; кількість шейків залежить від фактичного раціону.", link: "" },
+          { name: "Doctor's Best Magnesium — доповнення", dose: "100 мг · 1 таблетка; максимум 200 мг", when: "Увечері · за ефектом і переносимістю", decision: "За потреби", status: "need", icon: "Mg", note: "З 150 мг у Mix: 250 мг при 1 таблетці; 350 мг при 2 — верхня межа для добавок.", link: "https://www.iherb.com/pr/doctor-s-best-high-absorption-magnesium-120-tablets-100-mg-per-tablet/15" },
+          { name: "NOW Foods Glycine — доповнення", dose: "До 1,8 г · трохи менше ½ ч. л.", when: "Перед сном · опційно після першого тижня", decision: "Опційно", status: "optional", icon: "☾", note: "Mix уже дає 1,2 г. Спочатку оцінити сон без дублювання, потім за потреби довести сумарно до ≈3 г.", link: "https://www.iherb.com/pr/now-foods-glycine-pure-powder-1-lb-454-g/615" },
+          { name: "Swanson Melatonin 500 мкг", dose: "1 капсула", when: "За 30–60 хв до сну · лише за потреби", decision: "За потреби", status: "need", icon: "☾", note: "Можна лишити для рідких кризових ночей; із Blueprint не дублюється.", link: "https://www.iherb.com/pr/swanson-vitamins-melatonin-extra-low-dose-500-mcg-60-vegan-caps/118320" },
+          { name: "PlantFusion Calcium", dose: "0 у звичайні дні Blueprint", when: "Лише у день з дуже низьким кальцієм у їжі", decision: "За потреби", status: "need", icon: "Ca", note: "Blueprint уже дає ≈450 мг calcium. Разом із fortified milk і насінням окрема таблетка зазвичай зайва.", link: "https://www.iherb.com/pr/plantfusion-vegan-planet-based-calcium-90-tablets-333-mg-per-tablet/102768" },
+          { name: "Окремий L-Theanine", dose: "0 у звичайні дні", when: "Пауза під час Blueprint", decision: "Припинити", status: "pause", icon: "α", note: "Longevity Mix уже містить 200 мг. У день з енергетиком не додавати ще одну капсулу автоматично.", link: "https://ua.iherb.com/pr/california-gold-nutrition-l-theanine-featuring-alphawave-200-mg-60-veggie-capsules/83280" },
+          { name: "Окремий glucosamine / chondroitin / MSM", dose: "0 під час Blueprint", when: "Пауза 30 днів", decision: "Припинити", status: "pause", icon: "◌", note: "Mix уже містить glucosamine sulfate 750 мг і sodium hyaluronate 120 мг. Активний спорт не вимагає постійного дублювання.", link: "https://ua.iherb.com/pr/deva-vegan-glucosamine-msm-cmo-turmeric-90-tablets/10893" },
+          { name: "Окремий iodine / NOW Kelp", dose: "0 під час Blueprint", when: "Пауза 30 днів", decision: "Припинити", status: "pause", icon: "I", note: "Essential Capsules уже містить 200 мкг йоду щодня.", link: "https://ua.iherb.com/pr/now-foods-kelp-150-mcg-200-tablets/685" },
+          { name: "California Gold LactoBif 5", dose: "0 під час Blueprint", when: "Пауза 30 днів", decision: "Припинити", status: "pause", icon: "◎", note: "Essential Capsules уже містить L. acidophilus 4 млрд CFU. Не дублювати без конкретної ШКТ-мети.", link: "https://www.iherb.com/pr/california-gold-nutrition-lactobif-5-probiotics-5-billion-cfu-60-veggie-capsules/64006" },
+          { name: "Окремий B12", dose: "0 під час Blueprint", when: "Пауза 30 днів", decision: "Припинити", status: "pause", icon: "B12", note: "Essential Capsules уже містить 125 мкг methylcobalamin щодня. Після циклу повернути 1000 мкг 2×/тиждень.", link: "https://ua.iherb.com/pr/now-foods-b-12-liposomal-spray-2-fl-oz-59-ml/12465" },
+          { name: "Solgar Iron 25 мг", dose: "0", when: "Пауза до аналізів", decision: "Пауза до аналізів", status: "pause", icon: "Fe", note: "Blueprint не створює показання до заліза. Повернення лише за CBC, ferritin, transferrin saturation або призначенням лікаря.", link: "https://www.iherb.com/pr/solgar-chelated-iron-100-tablets-25-mg-per-tablet/48553" },
+          { name: "Ancient Nutrition Vegetarian Collagen Peptides", dose: "0", when: "Не використовувати", decision: "Припинити", status: "stop", icon: "!", note: "Містить collagen із мембрани яєчної шкаралупи; не відповідає веганству.", link: "https://www.iherb.com/pr/ancient-nutrition-vegetarian-collagen-peptides-naturally-flavored-9-9-oz-280-g/115164" }
+        ]
+      }
+    };
+
+    const statusClass = {
+      active: "status-active",
+      buy: "status-buy",
+      optional: "status-optional",
+      need: "status-need",
+      pause: "status-pause",
+      stop: "status-stop"
+    };
+
+    const filterGroups = {
+      all: ["active", "buy", "optional", "need", "pause", "stop"],
+      active: ["active", "buy"],
+      conditional: ["optional", "need"],
+      pause: ["pause", "stop"]
+    };
+
+    let activeProtocol = location.hash === "#blueprint" ? "blueprint" : "current";
+    let activeFilter = "all";
+
+    const els = {
+      kicker: document.querySelector("#protocolKicker"),
+      title: document.querySelector("#protocolTitle"),
+      description: document.querySelector("#protocolDescription"),
+      notice: document.querySelector("#protocolNotice"),
+      focus: document.querySelector("#focusCard"),
+      schedule: document.querySelector("#schedule"),
+      grid: document.querySelector("#supplementGrid"),
+      count: document.querySelector("#listCount"),
+      bottomRule: document.querySelector("#bottomRule"),
+      notion: document.querySelector("#notionLink")
+    };
+
+    function renderProtocol() {
+      const protocol = protocols[activeProtocol];
+      els.kicker.textContent = protocol.kicker;
+      els.title.textContent = protocol.title;
+      els.description.textContent = protocol.description;
+      els.notice.textContent = protocol.notice;
+      els.bottomRule.textContent = protocol.bottomRule;
+      els.notion.href = protocol.notion;
+      els.notion.textContent = activeProtocol === "current" ? "Поточний протокол у Notion ↗" : "Blueprint у Notion ↗";
+
+      els.focus.innerHTML = protocol.focus.map(([label, value]) => `
+        <div class="focus-item">
+          <span class="focus-label">${label}</span>
+          <span class="focus-value">${value}</span>
+        </div>
+      `).join("");
+
+      els.schedule.innerHTML = protocol.schedule.map(group => `
+        <article class="schedule-column">
+          <div class="schedule-icon" aria-hidden="true">${group.icon}</div>
+          <div class="schedule-label">${group.label}</div>
+          <ul class="schedule-list">${group.items.map(item => `<li>${item}</li>`).join("")}</ul>
+        </article>
+      `).join("");
+
+      document.querySelectorAll(".protocol-tab").forEach(button => {
+        const selected = button.dataset.protocol === activeProtocol;
+        button.classList.toggle("active", selected);
+        button.setAttribute("aria-pressed", String(selected));
+      });
+      renderSupplements();
+    }
+
+    function renderSupplements() {
+      const all = protocols[activeProtocol].supplements;
+      const visible = all.filter(item => filterGroups[activeFilter].includes(item.status));
+      els.count.textContent = `${visible.length} із ${all.length} позицій`;
+
+      if (!visible.length) {
+        els.grid.innerHTML = `<div class="empty-state">У цій категорії немає позицій.</div>`;
+        return;
+      }
+
+      els.grid.innerHTML = visible.map(item => {
+        const title = item.link
+          ? `<a class="product-link" href="${item.link}" target="_blank" rel="noreferrer">${item.name} ↗</a>`
+          : item.name;
+        return `
+          <article class="supplement-card">
+            <div class="supplement-icon" aria-hidden="true">${item.icon}</div>
+            <div>
+              <div class="card-top">
+                <h3 class="supplement-name">${title}</h3>
+                <span class="status ${statusClass[item.status]}">${item.decision}</span>
+              </div>
+              <p class="dose">${item.dose}</p>
+              <p class="when">${item.when}</p>
+              <p class="ai-note"><strong>AI note:</strong> ${item.note}</p>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    document.querySelectorAll(".protocol-tab").forEach(button => {
+      button.addEventListener("click", () => {
+        activeProtocol = button.dataset.protocol;
+        activeFilter = "all";
+        history.replaceState(null, "", `#${activeProtocol}`);
+        document.querySelectorAll(".filter-button").forEach((item, index) => item.classList.toggle("active", index === 0));
+        renderProtocol();
+      });
+    });
+
+    document.querySelectorAll(".filter-button").forEach(button => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll(".filter-button").forEach(item => item.classList.toggle("active", item === button));
+        renderSupplements();
+      });
+    });
+
+    document.querySelector("#printButton").addEventListener("click", () => window.print());
+    renderProtocol();
+  </script>
+</body>
+</html>
