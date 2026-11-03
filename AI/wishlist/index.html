@@ -71,6 +71,7 @@
     .danger-text { color: #854233; }
     .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     .gift-card { display: flex; flex-direction: column; align-items: start; gap: 15px; padding: 24px; min-width: 0; border: 1px solid var(--edge); border-radius: 16px; background: var(--surface); overflow-wrap: anywhere; }
+    .gift-image { width: 100%; height: clamp(150px, 32vw, 230px); object-fit: contain; border-radius: 9px; background: var(--paper); }
     .gift-title { margin: 0; font-family: var(--serif); font-size: 1.55rem; line-height: 1.2; font-weight: 400; letter-spacing: -.026em; }
     .gift-note { white-space: pre-line; margin: 0; line-height: 1.55; font-size: .95rem; color: var(--muted); }
     .gift-meta, .actions, .form-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
@@ -207,6 +208,7 @@
       <div id="gift-fields" hidden>
         <div class="form-field"><label for="gift-name">Назва подарунка</label><input id="gift-name" type="text" maxlength="180" required></div>
         <div class="form-field"><label for="gift-url">Посилання на магазин <span class="optional">(необов’язково)</span></label><input id="gift-url" type="url" maxlength="2048" placeholder="https://" inputmode="url" autocapitalize="none" spellcheck="false"></div>
+        <div class="form-field"><label for="gift-image-url">Посилання на зображення <span class="optional">(необов’язково)</span></label><input id="gift-image-url" type="url" maxlength="2048" placeholder="https://example.com/photo.jpg" inputmode="url" autocapitalize="none" spellcheck="false"></div>
         <div class="form-field"><label for="gift-price">Ціна <span class="optional">(необов’язково)</span></label><input id="gift-price" type="text" maxlength="120" placeholder="Наприклад, 1 200 грн"></div>
         <div class="form-field"><label for="gift-note">Примітка <span class="optional">(необов’язково)</span></label><textarea id="gift-note" rows="3" maxlength="3000"></textarea></div>
       </div>
@@ -220,7 +222,7 @@
   const publishableKey = 'sb_publishable_zCqm2TY9afGNPEuyJaAxMA_j3p2j6h_';
   const byId = id => document.getElementById(id);
   const modal = byId('modal');
-  const fields = [byId('gift-name'), byId('gift-url'), byId('gift-note'), byId('gift-price')];
+  const fields = [byId('gift-name'), byId('gift-url'), byId('gift-image-url'), byId('gift-price'), byId('gift-note')];
   let role = null;
   let session = null;
   let busy = false;
@@ -246,6 +248,11 @@
       const url = new URL(value);
       return url.username || url.password ? null : url.href;
     } catch { return null; }
+  }
+
+  function safeImageURL(value) {
+    const url = safeURL(value);
+    return url?.startsWith('https://') ? url : null;
   }
 
   async function rpc(name, body) {
@@ -345,6 +352,17 @@
 
   function giftCard(gift) {
     const card = element('article', 'gift-card');
+    const imageURL = safeImageURL(gift.image_url);
+    if (imageURL) {
+      const image = element('img', 'gift-image');
+      image.alt = 'Фото подарунка «' + gift.title + '»';
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.referrerPolicy = 'no-referrer';
+      image.addEventListener('error', () => image.remove(), { once: true });
+      image.src = imageURL;
+      card.append(image);
+    }
     if (role === 'guest') {
       card.append(element('span', gift.is_reserved ? 'badge taken' : 'badge', gift.is_reserved ? 'Заброньовано' : 'Вільно'));
     }
@@ -386,7 +404,7 @@
     const owner = role === 'admin';
     listState('Завантажуємо список…');
     try {
-      const gifts = owner ? await rpc('wish_admin_list', { p_session: session }) : await rpc('wish_guest_list', {});
+      const gifts = owner ? await rpc('wish_admin_list_v2', { p_session: session }) : await rpc('wish_guest_list_v2', {});
       if (!Array.isArray(gifts)) throw new Error('Сервер повернув список у невідомому форматі.');
       if (!gifts.length) {
         listState('Список поки порожній', owner ? 'Натисни «Додати подарунок», щоб записати перше бажання.' : 'Андрій ще не додав подарунків. Завітай пізніше.');
@@ -417,7 +435,7 @@
     byId('dialog-form').reset();
     fields.forEach(field => { field.disabled = !editing; field.setCustomValidity(''); });
     if (kind === 'edit') {
-      [gift.title, gift.url, gift.note, gift.price_text].forEach((value, index) => { fields[index].value = value || ''; });
+      [gift.title, gift.url, gift.image_url, gift.price_text, gift.note].forEach((value, index) => { fields[index].value = value || ''; });
     }
     byId('confirm').className = 'button ' + (kind === 'delete' ? 'danger' : 'primary');
     byId('confirm').textContent = confirm;
@@ -430,14 +448,23 @@
     const { kind, gift } = intent;
     let message, conflict = false;
     if (kind === 'add' || kind === 'edit') {
-      const [title, url, note, price] = fields.map(field => field.value.trim());
+      const [title, url, imageURL, price, note] = fields.map(field => field.value.trim());
       if (!title || (url && !safeURL(url))) {
         const invalid = !title ? fields[0] : fields[1];
         invalid.setCustomValidity(!title ? 'Введи назву подарунка.' : 'Введи посилання, яке починається з https:// або http://.');
         invalid.reportValidity();
         return;
       }
-      const saved = await rpc('wish_admin_save', { p_session: session, p_id: gift?.id ?? null, p_title: title, p_url: url || null, p_note: note || null, p_price_text: price || null });
+      if (imageURL && !safeImageURL(imageURL)) {
+        const imageField = byId('gift-image-url');
+        imageField.setCustomValidity('Введи пряме HTTPS-посилання на зображення.');
+        imageField.reportValidity();
+        return;
+      }
+      const saved = await rpc('wish_admin_save_v2', {
+        p_session: session, p_id: gift?.id ?? null, p_title: title, p_url: url || null,
+        p_note: note || null, p_price_text: price || null, p_image_url: imageURL || null
+      });
       if (typeof saved !== 'string' || !saved) throw new Error('Не вдалося підтвердити збереження. Перевір список перед повторною спробою.');
       message = kind === 'add' ? 'Подарунок додано.' : 'Зміни збережено.';
     } else if (kind === 'delete') {
