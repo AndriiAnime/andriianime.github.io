@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ee">
+  <meta name="referrer" content="no-referrer">
+  <title>Список бажань Андрія</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f8f5ee;
+      --surface: #fffdf8;
+      --ink: #262f2b;
+      --muted: #575e55;
+      --edge: #d7d8ca;
+      --forest: #294f40;
+      --green: #dfe9dc;
+      --rose: #f1daca;
+      --rust: #8e422f;
+      --serif: Georgia, "Times New Roman", serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 280px; }
+    [hidden] { display: none !important; }
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    button:disabled { cursor: wait; opacity: .6; }
+    :focus-visible { outline: 3px solid #94583b; outline-offset: 4px; }
+    svg { display: block; }
+    .icons { width: 0; height: 0; position: absolute; }
+    .icon { width: 21px; height: 21px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .frame { width: min(100% - 48px, 990px); margin: 0 auto; }
+    .masthead { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 82px; border-bottom: 1px solid var(--edge); }
+    .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--forest); font-weight: 660; font-size: .95rem; }
+    .brand-mark { display: grid; place-items: center; height: 35px; width: 35px; border-radius: 50%; color: var(--paper); background: var(--forest); }
+    main { padding: 46px 0 70px; }
+    .hero { position: relative; isolation: isolate; display: flex; align-items: center; padding: clamp(32px, 6vw, 68px); overflow: hidden; background: #e3e9db; border: 1px solid #cbd5c5; border-radius: 22px; }
+    .intro { z-index: 1; max-width: 64%; }
+    .eyebrow { display: flex; align-items: center; gap: 11px; margin: 0 0 16px; color: var(--forest); font-size: .71rem; line-height: 1.4; font-weight: 720; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, .section-title, .dialog-title, .role-title { font-family: var(--serif); font-weight: 400; }
+    h1 { margin-bottom: 18px; font-size: clamp(2.8rem, 7vw, 5rem); line-height: 1.02; letter-spacing: -.055em; }
+    .intro p:last-child, .section-desc { margin: 0; color: var(--muted); font-size: 1.015rem; line-height: 1.6; }
+    .hero-art { position: absolute; width: 33%; max-width: 330px; right: 3.5%; height: auto; }
+    .roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
+    .role { display: flex; flex-direction: column; align-items: stretch; gap: 18px; width: 100%; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--edge); border-radius: 17px; padding: clamp(19px, 3.4vw, 32px); transition: border-color .15s, background-color .15s; }
+    .role:hover { border-color: #8c9c87; background: #fffefb; }
+    .role-top { display: flex; align-items: center; justify-content: space-between; }
+    .role-icon { display: grid; place-items: center; width: 43px; height: 43px; border-radius: 13px; background: var(--rose); color: #80442e; }
+    .role.guest .role-icon { background: var(--green); color: var(--forest); }
+    .role-arrow { color: var(--muted); }
+    .role-title { display: block; margin-bottom: 7px; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.18; letter-spacing: -.035em; }
+    .role-description { display: block; font-size: .94rem; color: var(--muted); line-height: 1.5; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 18px 0 30px; }
+    .section-title { margin: 0 0 9px; font-size: clamp(2.35rem, 6.2vw, 4rem); letter-spacing: -.05em; line-height: 1.09; }
+    .section-title:focus, h1:focus { outline: none; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 9px 16px; border: 1px solid transparent; border-radius: 10px; font-size: .91rem; line-height: 1.4; font-weight: 610; text-decoration: none; }
+    .primary { background: var(--forest); color: white; }
+    .primary:hover:enabled { background: #1c3e31; }
+    .secondary { background: var(--surface); color: var(--forest); border-color: #bfc9bb; }
+    .secondary:hover:enabled { background: #edf1e7; }
+    .quiet { background: transparent; color: var(--muted); }
+    .quiet:hover:enabled { background: #edeae0; }
+    .danger { background: #803d32; color: white; }
+    .danger-text { color: #854233; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .gift-card { display: flex; flex-direction: column; align-items: start; gap: 15px; padding: 24px; min-width: 0; border: 1px solid var(--edge); border-radius: 16px; background: var(--surface); overflow-wrap: anywhere; }
+    .gift-title { margin: 0; font-family: var(--serif); font-size: 1.55rem; line-height: 1.2; font-weight: 400; letter-spacing: -.026em; }
+    .gift-note { white-space: pre-line; margin: 0; line-height: 1.55; font-size: .95rem; color: var(--muted); }
+    .gift-meta, .actions, .form-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .gift-meta { gap: 8px 18px; }
+    .price { font-weight: 650; font-size: .94rem; }
+    .shop { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; color: var(--forest); font-size: .91rem; text-underline-offset: 3px; }
+    .shop .icon { width: 15px; height: 15px; }
+    .actions { margin-top: auto; padding-top: 5px; }
+    .badge { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 20px; color: #375641; background: #e2eddf; font-size: .76rem; font-weight: 650; }
+    .badge::before { content: ""; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
+    .badge.taken { color: #60564d; background: #ece8e0; }
+    .state, .login-card { background: var(--surface); border: 1px solid var(--edge); border-radius: 16px; padding: clamp(22px, 4.2vw, 40px); }
+    .state p { margin-bottom: 0; line-height: 1.6; color: var(--muted); }
+    .state h3 { font-family: var(--serif); font-size: 1.55rem; font-weight: 400; margin-bottom: 8px; }
+    .state .button { margin-top: 16px; }
+    .login-card { max-width: 490px; }
+    .form-field { display: grid; gap: 7px; margin-bottom: 16px; }
+    label { font-weight: 630; font-size: .94rem; }
+    .optional { color: var(--muted); font-size: .81rem; font-weight: 400; }
+    input, textarea { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid #b8c1b4; border-radius: 8px; background: #fffefa; color: var(--ink); }
+    textarea { resize: vertical; min-height: 80px; }
+    .feedback { margin: 0 0 16px; padding: 12px 16px; border-radius: 10px; color: var(--forest); background: #e4ecdf; line-height: 1.5; }
+    .feedback:empty { display: none; }
+    .feedback.error { color: #71332c; background: #f5e3d9; }
+    dialog { width: min(calc(100% - 32px), 465px); max-height: calc(100dvh - 32px); padding: clamp(23px, 4vw, 34px); color: var(--ink); background: var(--surface); border: 1px solid var(--edge); border-radius: 17px; box-shadow: 0 15px 70px #17251d2e; }
+    dialog::backdrop { background: #1e2e2469; }
+    .dialog-title { margin: 0 0 14px; font-size: 1.95rem; letter-spacing: -.04em; line-height: 1.15; overflow-wrap: anywhere; }
+    .dialog-copy { color: var(--muted); line-height: 1.55; overflow-wrap: anywhere; }
+    .form-actions { justify-content: flex-end; margin-top: 22px; }
+    .prevent-wrap { flex: none; }
+    @media (max-width: 650px) {
+      .frame { width: min(100% - 32px, 520px); }
+      .masthead { min-height: 69px; }
+      main { padding: 27px 0 45px; }
+      .hero { min-height: 235px; padding: 28px 22px; }
+      .intro { max-width: 72%; }
+      .hero-art { width: 31%; right: 1%; }
+      h1 { font-size: clamp(2.25rem, 9vw, 3.3rem); }
+      .intro p:last-child { font-size: .91rem; }
+      .roles, .cards { grid-template-columns: 1fr; gap: 12px; }
+      .roles { margin-top: 15px; }
+      .role { gap: 13px; }
+      .role-icon { width: 36px; height: 36px; border-radius: 10px; }
+      .section-head { flex-wrap: wrap; margin: 6px 0 22px; gap: 15px; }
+      .brand { gap: 8px; font-size: .9rem; }
+      .masthead .button { padding: 8px; }
+      .gift-card { padding: 19px; }
+    }
+    @media (max-width: 360px) {
+      .hero-art { opacity: .6; }
+      .intro { max-width: 85%; }
+      .brand-mark { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <svg class="icons" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M3 9h18v4H3zM5 13v8h14v-8M12 9v12M12 9C7 9 5 7.8 5 5.7c0-1.5 1.2-2.4 2.7-2.1C10 4.1 12 9 12 9Zm0 0s2-4.9 4.3-5.4c1.5-.3 2.7.6 2.7 2.1C19 7.8 17 9 12 9Z"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="m5 15-1 5 5-1L20 8l-4-4Zm9-9 4 4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 12H5m6-6-6 6 6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M7 17 18 6M8 6h10v10"/></symbol>
+  </svg>
+  <div class="frame">
+    <header class="masthead">
+      <div class="brand"><span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-gift"/></svg></span>Список бажань</div>
+      <button type="button" id="back" class="button quiet" hidden><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg>На головну</button>
+    </header>
+    <main>
+      <section id="home" aria-labelledby="home-title">
+        <div class="hero">
+          <div class="intro">
+            <p class="eyebrow">Особиста добірка</p>
+            <h1 tabindex="-1" id="home-title">Список бажань<br>Андрія</h1>
+            <p>Тут зібрані речі, які я хотів би отримати в подарунок.</p>
+          </div>
+          <svg class="hero-art" aria-hidden="true" viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 192c38 13 145 21 224 2" stroke="#bfcdba" stroke-width="2" stroke-linecap="round"/>
+            <g transform="rotate(9 159 138)" stroke="#435448" stroke-width="2.1" stroke-linejoin="round">
+              <path d="m109 101 33-13 72 12-34 15z" fill="#e1c1a4"/><path d="m110 106 71 11-1 76-70-14z" fill="#cf916f"/><path d="m181 117 31-14-2 75-30 15z" fill="#ae765a"/>
+              <path d="m107 98 72 12 37-16-72-11z" fill="#f1d4b9"/><path d="m107 98 72 12v13l-72-12z" fill="#e2ac8a"/><path d="m179 110 37-16v13l-37 16z" fill="#bf896d"/>
+              <path d="m138 104 14 2 34-16-13-2z" fill="#f4e8c9"/><path d="m138 104 14 2-1 81-13-2z" fill="#eadab5"/>
+            </g>
+            <g transform="rotate(-8 105 144)" stroke="#435448" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m42 119 70 7 52-19-63-8z" fill="#dae3c9"/><path d="m45 131 67 6 1 57-67-9z" fill="#aabda1"/><path d="m112 137 49-19-1 57-47 19z" fill="#88a28b"/>
+              <path d="m39 118 72 7 54-19-69-7z" fill="#e3e8d4"/><path d="m39 118 72 7 1 14-72-7z" fill="#bacaad"/><path d="m111 125 54-19v14l-53 19z" fill="#9db39b"/>
+              <path d="m66 121 15 2 53-21-15-1z" fill="#f7eacf"/><path d="m66 121 15 2 1 67-15-2z" fill="#edddba"/>
+              <path d="M99 111C82 108 59 91 62 82c4-11 29 0 38 28Zm1-1c3-21 19-39 28-31 9 9-11 27-28 31Z" fill="#dfac8b"/>
+              <path d="M99 109c-8-9-16-15-23-18m27 17c7-11 12-17 17-20"/>
+            </g>
+            <g stroke="#768a74" stroke-width="1.7" stroke-linecap="round"><path d="M51 43v13m-6-6h12m142-4 1 10m-5-4 10-2M23 103l4 7m3-9-9 8"/><circle cx="176" cy="30" r="2" fill="#768a74" stroke="none"/></g>
+          </svg>
+        </div>
+        <div class="roles">
+          <button type="button" class="role" id="enter-owner">
+            <span class="role-top"><span class="role-icon"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></span><svg class="icon role-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+            <span><span class="role-title">Вхід для Андрія</span><span class="role-description">Додати ідею або відредагувати свій список.</span></span>
+          </button>
+          <button type="button" class="role guest" id="enter-guest">
+            <span class="role-top"><span class="role-icon"><svg class="icon" aria-hidden="true"><use href="#i-gift"/></svg></span><svg class="icon role-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+            <span><span class="role-title">Вхід для гостей</span><span class="role-description">Переглянути ідеї та обрати подарунок для Андрія.</span></span>
+          </button>
+        </div>
+      </section>
+      <section id="login" aria-labelledby="login-title" hidden>
+        <div class="section-head"><div>
+          <p class="eyebrow">Особистий вхід</p>
+          <h1 tabindex="-1" id="login-title" class="section-title">Вхід для Андрія</h1>
+          <p class="section-desc">Введи ключ доступу, щоб редагувати список.</p>
+        </div></div>
+        <form id="login-form" class="login-card">
+          <div class="form-field"><label for="access-key">Ключ доступу</label><input id="access-key" type="password" required autocomplete="current-password" autocapitalize="none" spellcheck="false"></div>
+          <p class="feedback" role="status" id="login-message"></p>
+          <button class="button primary" type="submit">Увійти</button>
+        </form>
+      </section>
+      <section id="list" aria-labelledby="list-title" hidden>
+        <div class="section-head">
+          <div><p class="eyebrow" id="list-kicker"></p><h1 tabindex="-1" id="list-title" class="section-title"></h1><p class="section-desc" id="list-description"></p></div>
+          <button id="add" type="button" class="button primary prevent-wrap" hidden><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Додати подарунок</button>
+        </div>
+        <p id="list-message" role="status" class="feedback"></p>
+        <div id="list-content"></div>
+      </section>
+      <noscript><p>Для роботи списку ввімкни JavaScript у браузері.</p></noscript>
+    </main>
+  </div>
+  <dialog id="modal" aria-labelledby="dialog-title">
+    <h2 id="dialog-title" class="dialog-title"></h2>
+    <p id="dialog-copy" class="dialog-copy" hidden></p>
+    <form id="dialog-form">
+      <div id="gift-fields" hidden>
+        <div class="form-field"><label for="gift-name">Назва подарунка</label><input id="gift-name" type="text" maxlength="180" required></div>
+        <div class="form-field"><label for="gift-url">Посилання на магазин <span class="optional">(необов’язково)</span></label><input id="gift-url" type="url" maxlength="2048" placeholder="https://" inputmode="url" autocapitalize="none" spellcheck="false"></div>
+        <div class="form-field"><label for="gift-price">Ціна <span class="optional">(необов’язково)</span></label><input id="gift-price" type="text" maxlength="120" placeholder="Наприклад, 1 200 грн"></div>
+        <div class="form-field"><label for="gift-note">Примітка <span class="optional">(необов’язково)</span></label><textarea id="gift-note" rows="3" maxlength="3000"></textarea></div>
+      </div>
+      <p id="dialog-message" role="status" class="feedback"></p>
+      <div class="form-actions"><button id="cancel" class="button secondary" type="button">Скасувати</button><button id="confirm" class="button primary" type="submit"></button></div>
+    </form>
+  </dialog>
+  <script>
+  'use strict';
+  const backend = 'https://gfllxprfccbfwyfwyphy.supabase.co';
+  const publishableKey = 'sb_publishable_zCqm2TY9afGNPEuyJaAxMA_j3p2j6h_';
+  const byId = id => document.getElementById(id);
+  const modal = byId('modal');
+  const fields = [byId('gift-name'), byId('gift-url'), byId('gift-note'), byId('gift-price')];
+  let role = null;
+  let session = null;
+  let busy = false;
+  let intent = null;
+  const rememberedTokens = new Map();
+
+  function element(tag, className, content) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (content !== undefined) node.textContent = content;
+    return node;
+  }
+
+  function notice(id, message = '', error = false) {
+    const node = byId(id);
+    node.classList.toggle('error', error);
+    node.textContent = message;
+  }
+
+  function safeURL(value) {
+    if (!value || !/^https?:\/\/[^\s\\]+$/i.test(value)) return null;
+    try {
+      const url = new URL(value);
+      return url.username || url.password ? null : url.href;
+    } catch { return null; }
+  }
+
+  async function rpc(name, body) {
+    if (!backend.startsWith('https://') || publishableKey.startsWith('__')) {
+      throw new Error('Список ще не підключено до сервера.');
+    }
+    const headers = { apikey: publishableKey, 'Content-Type': 'application/json' };
+    if (publishableKey.startsWith('eyJ') && publishableKey.split('.').length === 3) {
+      headers.Authorization = 'Bearer ' + publishableKey;
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 18000);
+    try {
+      const response = await fetch(backend.replace(/\/$/, '') + '/rest/v1/rpc/' + name, {
+        method: 'POST', credentials: 'omit', cache: 'no-store', headers,
+        body: JSON.stringify(body), signal: controller.signal
+      });
+      if (!response.ok) {
+        const problem = await response.json().catch(() => ({}));
+        if (name === 'wish_admin_login' && (problem.code === '28000' || problem.code === 'P0001' || response.status === 403)) {
+          throw new Error('Не вдалося увійти. Перевір ключ доступу.');
+        }
+        if (response.status === 429) throw new Error('Забагато спроб. Зачекай трохи й повтори.');
+        if (problem.code === 'P0002') throw new Error('Цього подарунка вже немає. Закрий вікно та відкрий список знову.');
+        if (role === 'admin' && ([401, 403].includes(response.status) || problem.code === '42501')) {
+          throw new Error('Сеанс недоступний. Повернися на головну та увійди знову.');
+        }
+        throw new Error('Сервер не виконав запит. Спробуй ще раз.');
+      }
+      const content = await response.text();
+      return content ? JSON.parse(content) : null;
+    } catch (error) {
+      if (error.name === 'AbortError' || error instanceof TypeError) {
+        throw new Error('Немає відповіді від сервера. Перевір з’єднання та спробуй ще раз.');
+      }
+      throw error;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  // Lock navigation and submits together so an old response cannot alter a new screen.
+  async function during(work) {
+    if (busy) return;
+    busy = true;
+    const controls = [...document.querySelectorAll('button:not(:disabled)')];
+    controls.forEach(control => { control.disabled = true; });
+    try { await work(); }
+    finally {
+      busy = false;
+      controls.forEach(control => { control.disabled = false; });
+    }
+  }
+
+  function go(screen) {
+    ['home', 'login', 'list'].forEach(id => { byId(id).hidden = id !== screen; });
+    byId('back').hidden = screen === 'home';
+    const heading = byId(screen + '-title');
+    heading.focus({ preventScroll: true });
+    window.scrollTo(0, 0);
+  }
+
+  function enterList(newRole) {
+    role = newRole;
+    const owner = role === 'admin';
+    byId('add').hidden = !owner;
+    byId('list-kicker').textContent = owner ? 'Кабінет Андрія' : 'Для гостей';
+    byId('list-title').textContent = owner ? 'Мої бажання' : 'Що подарувати Андрію';
+    byId('list-description').textContent = owner ? 'Додавай нові ідеї або редагуй ті, що вже є.' : 'Обери вільний подарунок і забронюй його. Ім’я вказувати не потрібно.';
+    notice('list-message');
+    byId('list-content').replaceChildren();
+    go('list');
+  }
+
+  function tokenKey(id) { return 'gift-wishlist:' + backend + ':' + id; }
+
+  function readToken(id) {
+    try { return localStorage.getItem(tokenKey(id)) || rememberedTokens.get(id); }
+    catch { return rememberedTokens.get(id); }
+  }
+
+  function keepToken(id, token) {
+    if (token) rememberedTokens.set(id, token);
+    else rememberedTokens.delete(id);
+    try {
+      if (token) localStorage.setItem(tokenKey(id), token);
+      else localStorage.removeItem(tokenKey(id));
+    } catch { /* The current tab can still release the gift. */ }
+  }
+
+  function action(label, style, click) {
+    const button = element('button', 'button ' + style, label);
+    button.type = 'button';
+    button.addEventListener('click', () => { if (!busy) click(); });
+    return button;
+  }
+
+  function giftCard(gift) {
+    const card = element('article', 'gift-card');
+    if (role === 'guest') {
+      card.append(element('span', gift.is_reserved ? 'badge taken' : 'badge', gift.is_reserved ? 'Заброньовано' : 'Вільно'));
+    }
+    card.append(element('h2', 'gift-title', gift.title));
+    if (gift.note) card.append(element('p', 'gift-note', gift.note));
+    const meta = element('div', 'gift-meta');
+    if (gift.price_text) meta.append(element('span', 'price', gift.price_text));
+    const link = safeURL(gift.url);
+    if (link) {
+      const shop = element('a', 'shop', 'Відкрити магазин ↗');
+      shop.href = link;
+      shop.target = '_blank';
+      shop.rel = 'noopener noreferrer';
+      meta.append(shop);
+    }
+    if (meta.childElementCount) card.append(meta);
+    const buttons = element('div', 'actions');
+    if (role === 'admin') {
+      buttons.append(action('Редагувати', 'secondary', () => openDialog('edit', gift)), action('Видалити', 'quiet danger-text', () => openDialog('delete', gift)));
+    } else if (!gift.is_reserved) {
+      buttons.append(action('Забронювати', 'primary', () => openDialog('reserve', gift)));
+    } else if (readToken(gift.id)) {
+      buttons.append(action('Зняти бронювання', 'secondary', () => openDialog('release', gift)));
+    }
+    if (buttons.childElementCount) card.append(buttons);
+    return card;
+  }
+
+  function listState(title, detail, retry = false) {
+    const state = element('div', 'state');
+    state.setAttribute('role', 'status');
+    state.append(element('h3', '', title));
+    if (detail) state.append(element('p', '', detail));
+    if (retry) state.append(action('Спробувати ще раз', 'secondary', () => during(refresh)));
+    byId('list-content').replaceChildren(state);
+  }
+
+  async function refresh() {
+    const owner = role === 'admin';
+    listState('Завантажуємо список…');
+    try {
+      const gifts = owner ? await rpc('wish_admin_list', { p_session: session }) : await rpc('wish_guest_list', {});
+      if (!Array.isArray(gifts)) throw new Error('Сервер повернув список у невідомому форматі.');
+      if (!gifts.length) {
+        listState('Список поки порожній', owner ? 'Натисни «Додати подарунок», щоб записати перше бажання.' : 'Андрій ще не додав подарунків. Завітай пізніше.');
+        return;
+      }
+      const cards = element('div', 'cards');
+      gifts.forEach(gift => cards.append(giftCard(gift)));
+      byId('list-content').replaceChildren(cards);
+    } catch (error) { listState('Не вдалося завантажити список', error.message, true); }
+  }
+
+  function openDialog(kind, gift = null) {
+    if (busy || modal.open) return;
+    intent = { kind, gift };
+    const editing = kind === 'add' || kind === 'edit';
+    const descriptions = {
+      add: ['Додати подарунок', '', 'Додати'],
+      edit: ['Редагувати подарунок', '', 'Зберегти'],
+      delete: ['Видалити подарунок?', '«' + (gift?.title || '') + '» зникне зі списку.', 'Видалити'],
+      reserve: ['Забронювати подарунок?', 'Інші гості побачать, що «' + (gift?.title || '') + '» уже обрано. Зняти бронювання можна з цього браузера.', 'Забронювати'],
+      release: ['Зняти бронювання?', 'Інші гості знову зможуть обрати «' + (gift?.title || '') + '».', 'Зняти бронювання']
+    };
+    const [title, copy, confirm] = descriptions[kind];
+    byId('dialog-title').textContent = title;
+    byId('dialog-copy').textContent = copy;
+    byId('dialog-copy').hidden = !copy;
+    byId('gift-fields').hidden = !editing;
+    byId('dialog-form').reset();
+    fields.forEach(field => { field.disabled = !editing; field.setCustomValidity(''); });
+    if (kind === 'edit') {
+      [gift.title, gift.url, gift.note, gift.price_text].forEach((value, index) => { fields[index].value = value || ''; });
+    }
+    byId('confirm').className = 'button ' + (kind === 'delete' ? 'danger' : 'primary');
+    byId('confirm').textContent = confirm;
+    notice('dialog-message');
+    modal.showModal();
+    (editing ? fields[0] : byId('cancel')).focus();
+  }
+
+  async function applyAction() {
+    const { kind, gift } = intent;
+    let message, conflict = false;
+    if (kind === 'add' || kind === 'edit') {
+      const [title, url, note, price] = fields.map(field => field.value.trim());
+      if (!title || (url && !safeURL(url))) {
+        const invalid = !title ? fields[0] : fields[1];
+        invalid.setCustomValidity(!title ? 'Введи назву подарунка.' : 'Введи посилання, яке починається з https:// або http://.');
+        invalid.reportValidity();
+        return;
+      }
+      const saved = await rpc('wish_admin_save', { p_session: session, p_id: gift?.id ?? null, p_title: title, p_url: url || null, p_note: note || null, p_price_text: price || null });
+      if (typeof saved !== 'string' || !saved) throw new Error('Не вдалося підтвердити збереження. Перевір список перед повторною спробою.');
+      message = kind === 'add' ? 'Подарунок додано.' : 'Зміни збережено.';
+    } else if (kind === 'delete') {
+      const deleted = await rpc('wish_admin_delete', { p_session: session, p_id: gift.id });
+      if (typeof deleted !== 'boolean') throw new Error('Не вдалося перевірити результат видалення.');
+      message = deleted ? 'Подарунок видалено.' : 'Цього подарунка вже немає у списку.';
+    } else {
+      const reserving = kind === 'reserve';
+      // Save the token before the request in case the server commits but the response is lost.
+      const token = readToken(gift.id) || (reserving ? crypto.randomUUID() : null);
+      let result = false;
+      if (token) {
+        if (reserving) keepToken(gift.id, token);
+        result = await rpc(reserving ? 'wish_reserve' : 'wish_release', { p_id: gift.id, p_token: token });
+        if (typeof result !== 'boolean') throw new Error('Не вдалося перевірити результат бронювання.');
+      }
+      if (!reserving || !result) keepToken(gift.id, null);
+      conflict = !result;
+      message = reserving
+        ? (result ? 'Подарунок заброньовано.' : 'Не вдалося забронювати. Подарунок уже обрали або видалили зі списку.')
+        : (result ? 'Бронювання знято.' : 'З цього браузера не вдалося зняти бронювання. Список оновлено.');
+    }
+    modal.close();
+    notice('list-message', message, conflict);
+    await refresh();
+    byId('list-title').focus({ preventScroll: true });
+  }
+
+  byId('enter-owner').addEventListener('click', () => {
+    notice('login-message'); go('login'); byId('access-key').focus();
+  });
+  byId('enter-guest').addEventListener('click', () => during(async () => { enterList('guest'); await refresh(); }));
+  byId('back').addEventListener('click', () => {
+    if (busy) return;
+    session = null; role = null;
+    byId('login-form').reset(); byId('list-content').replaceChildren();
+    notice('list-message'); go('home');
+  });
+  byId('login-form').addEventListener('submit', event => {
+    event.preventDefault();
+    during(async () => {
+      notice('login-message', 'Перевіряємо ключ…');
+      try {
+        const token = await rpc('wish_admin_login', { p_key: byId('access-key').value });
+        if (typeof token !== 'string' || !token) throw new Error('Не вдалося увійти. Перевір ключ доступу. Після кількох спроб зачекай п’ять хвилин.');
+        session = token;
+        byId('login-form').reset(); enterList('admin'); await refresh();
+      } catch (error) { notice('login-message', error.message, true); }
+    });
+  });
+  byId('add').addEventListener('click', () => openDialog('add'));
+  byId('cancel').addEventListener('click', () => { if (!busy) modal.close(); });
+  modal.addEventListener('cancel', event => { if (busy) event.preventDefault(); });
+  modal.addEventListener('close', () => { intent = null; });
+  fields.forEach(field => field.addEventListener('input', () => field.setCustomValidity('')));
+  byId('dialog-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!intent) return;
+    during(async () => {
+      notice('dialog-message', 'Обробляємо запит…');
+      try { await applyAction(); }
+      catch (error) { notice('dialog-message', error.message, true); }
+      if (byId('dialog-message').textContent === 'Обробляємо запит…') notice('dialog-message');
+    });
+  });
+  </script>
+</body>
+</html>
