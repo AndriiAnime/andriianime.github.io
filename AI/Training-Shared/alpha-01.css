@@ -1,0 +1,12 @@
+/* Alpha 01 additions: retain the classic and Tanya themes. */
+.main-column,.modebar,.segmented,.feedback-grid,.exercise-log,.field{min-width:0}
+.modebar{flex-wrap:wrap}.segmented{max-width:100%;flex-wrap:wrap}.segmented button{padding-inline:16px}
+.mode-badge{font-size:.6rem}.block-heading{grid-column:1/-1;padding:14px 0 3px}.block-heading h3{margin:0 0 6px;font-size:1.1rem}.block-heading p{margin:0;font-size:.78rem;color:var(--muted)}
+.anchor-choice{display:flex;align-items:center;gap:10px;font-size:.82rem;margin:0 0 20px}.anchor-choice input{width:20px;height:20px;min-height:20px;flex:0 0 20px}
+.exercise-log,.exercise-log.band-log{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.exercise-log .setup-field{grid-column:1/-1}.exercise-index{white-space:nowrap}.metric-value{overflow-wrap:anywhere}
+.journal-tools{display:flex;align-items:end;gap:12px;margin-bottom:22px}.journal-tools .field{flex:1}.journal-tools .secondary{white-space:nowrap}.archive-note .text-button{white-space:normal;font-size:inherit}
+input,select,textarea{min-width:0;max-width:100%;box-sizing:border-box}input[type=date]{display:block;width:100%;min-width:0;max-width:100%;appearance:none;-webkit-appearance:none;min-height:44px}input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:1.5em}input[type=date]::-webkit-datetime-edit{padding:0;min-width:0}
+.timer-presets select{width:88px;min-width:72px;color:inherit;background:transparent;border-color:currentColor;font-size:.8rem;min-height:40px}.timer-presets option{color:#172a25;background:#fff}
+@media(max-width:760px){.segmented button{font-size:.74rem;padding:9px 8px;gap:5px}.mode-badge{display:none}.feedback-grid{grid-template-columns:minmax(0,1fr)}.feedback-grid .full{grid-column:auto}.journal-tools{flex-wrap:wrap}.journal-tools .field{flex-basis:100%}.journal-tools .secondary{padding:8px 14px;min-height:40px}.exercise-log input{font-size:16px}.block-heading{padding-top:17px}.block-heading h3{font-size:1rem}.timer-dock{gap:12px}.timer-presets select{width:78px}.progress-line{gap:10px;align-items:start}.progress-line>span:first-child{max-width:65%}.hero-stats b{white-space:nowrap}}
+@media(max-width:420px){.segmented button[data-mode=mixed]{flex-basis:100%}.toplinks{gap:10px}.toplinks a{font-size:.68rem}.exercise-header{gap:9px}.complete span{display:none}.prescription{gap:8px}.metric-value{font-size:.9rem}}
+@media print{.block-heading{break-after:avoid}.anchor-choice,.journal-tools{display:none}.exercise{break-inside:avoid}.exercise-list{display:block}.block-heading p{color:#333}}
