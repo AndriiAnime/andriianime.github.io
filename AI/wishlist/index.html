@@ -89,6 +89,9 @@
     .state .button { margin-top: 16px; }
     .login-card { max-width: 490px; }
     .form-field { display: grid; gap: 7px; margin-bottom: 16px; }
+    .photo-preview:empty { display: none; }
+    .photo-preview img { display: block; max-width: 100%; height: 100px; object-fit: contain; border-radius: 8px; }
+    .photo-preview p { margin: 0; color: var(--muted); font-size: .85rem; line-height: 1.4; }
     label { font-weight: 630; font-size: .94rem; }
     .optional { color: var(--muted); font-size: .81rem; font-weight: 400; }
     input, textarea { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid #b8c1b4; border-radius: 8px; background: #fffefa; color: var(--ink); }
@@ -207,10 +210,18 @@
     <form id="dialog-form">
       <div id="gift-fields" hidden>
         <div class="form-field"><label for="gift-name">Назва подарунка</label><input id="gift-name" type="text" maxlength="180" required></div>
+        <div class="form-field">
+          <label for="gift-image-url">Пряме посилання на фото <span class="optional">(необов’язково)</span></label>
+          <input id="gift-image-url" type="url" maxlength="2048" placeholder="https://example.com/photo.jpg" inputmode="url" autocapitalize="none" spellcheck="false">
+          <div id="photo-preview" class="photo-preview" aria-live="polite"></div>
+        </div>
         <div class="form-field"><label for="gift-url">Посилання на магазин <span class="optional">(необов’язково)</span></label><input id="gift-url" type="url" maxlength="2048" placeholder="https://" inputmode="url" autocapitalize="none" spellcheck="false"></div>
-        <div class="form-field"><label for="gift-image-url">Посилання на зображення <span class="optional">(необов’язково)</span></label><input id="gift-image-url" type="url" maxlength="2048" placeholder="https://example.com/photo.jpg" inputmode="url" autocapitalize="none" spellcheck="false"></div>
         <div class="form-field"><label for="gift-price">Ціна <span class="optional">(необов’язково)</span></label><input id="gift-price" type="text" maxlength="120" placeholder="Наприклад, 1 200 грн"></div>
         <div class="form-field"><label for="gift-note">Примітка <span class="optional">(необов’язково)</span></label><textarea id="gift-note" rows="3" maxlength="3000"></textarea></div>
+      </div>
+      <div class="form-field" id="reservation-fields" hidden>
+        <label for="guest-name">Твоє ім’я <span class="optional">(обов’язково)</span></label>
+        <input id="guest-name" type="text" maxlength="80" autocomplete="given-name" required disabled>
       </div>
       <p id="dialog-message" role="status" class="feedback"></p>
       <div class="form-actions"><button id="cancel" class="button secondary" type="button">Скасувати</button><button id="confirm" class="button primary" type="submit"></button></div>
@@ -223,6 +234,8 @@
   const byId = id => document.getElementById(id);
   const modal = byId('modal');
   const fields = [byId('gift-name'), byId('gift-url'), byId('gift-image-url'), byId('gift-price'), byId('gift-note')];
+  const guestName = byId('guest-name');
+  let previewTimer;
   let role = null;
   let session = null;
   let busy = false;
@@ -253,6 +266,21 @@
   function safeImageURL(value) {
     const url = safeURL(value);
     return url?.startsWith('https://') ? url : null;
+  }
+
+  function showPhotoPreview() {
+    const preview = byId('photo-preview');
+    preview.replaceChildren();
+    const url = safeImageURL(byId('gift-image-url').value.trim());
+    if (!url) return;
+    const image = element('img');
+    image.alt = 'Попередній перегляд фото подарунка';
+    image.referrerPolicy = 'no-referrer';
+    image.addEventListener('error', () => {
+      image.replaceWith(element('p', '', 'Не вдалося показати фото. Перевір, чи посилання відкриває саме зображення.'));
+    }, { once: true });
+    preview.append(image);
+    image.src = url;
   }
 
   async function rpc(name, body) {
@@ -321,7 +349,7 @@
     byId('add').hidden = !owner;
     byId('list-kicker').textContent = owner ? 'Кабінет Андрія' : 'Для гостей';
     byId('list-title').textContent = owner ? 'Мої бажання' : 'Що подарувати Андрію';
-    byId('list-description').textContent = owner ? 'Додавай нові ідеї або редагуй ті, що вже є.' : 'Обери вільний подарунок і забронюй його. Ім’я вказувати не потрібно.';
+    byId('list-description').textContent = owner ? 'Додавай нові ідеї або редагуй ті, що вже є.' : 'Обери вільний подарунок і вкажи своє ім’я під час бронювання.';
     notice('list-message');
     byId('list-content').replaceChildren();
     go('list');
@@ -432,16 +460,20 @@
     byId('dialog-copy').textContent = copy;
     byId('dialog-copy').hidden = !copy;
     byId('gift-fields').hidden = !editing;
+    byId('reservation-fields').hidden = kind !== 'reserve';
+    guestName.disabled = kind !== 'reserve';
+    guestName.setCustomValidity('');
     byId('dialog-form').reset();
     fields.forEach(field => { field.disabled = !editing; field.setCustomValidity(''); });
     if (kind === 'edit') {
       [gift.title, gift.url, gift.image_url, gift.price_text, gift.note].forEach((value, index) => { fields[index].value = value || ''; });
     }
+    if (editing) showPhotoPreview();
     byId('confirm').className = 'button ' + (kind === 'delete' ? 'danger' : 'primary');
     byId('confirm').textContent = confirm;
     notice('dialog-message');
     modal.showModal();
-    (editing ? fields[0] : byId('cancel')).focus();
+    (editing ? fields[0] : kind === 'reserve' ? guestName : byId('cancel')).focus();
   }
 
   async function applyAction() {
@@ -473,12 +505,21 @@
       message = deleted ? 'Подарунок видалено.' : 'Цього подарунка вже немає у списку.';
     } else {
       const reserving = kind === 'reserve';
+      const name = guestName.value.trim();
+      if (reserving && (!name || [...name].length > 80)) {
+        guestName.setCustomValidity('Введи своє ім’я (до 80 символів).');
+        guestName.reportValidity();
+        return;
+      }
       // Save the token before the request in case the server commits but the response is lost.
       const token = readToken(gift.id) || (reserving ? crypto.randomUUID() : null);
       let result = false;
       if (token) {
         if (reserving) keepToken(gift.id, token);
-        result = await rpc(reserving ? 'wish_reserve' : 'wish_release', { p_id: gift.id, p_token: token });
+        const payload = { p_id: gift.id, p_token: token };
+        result = reserving
+          ? await rpc('wish_reserve_v2', { ...payload, p_name: name })
+          : await rpc('wish_release', payload);
         if (typeof result !== 'boolean') throw new Error('Не вдалося перевірити результат бронювання.');
       }
       if (!reserving || !result) keepToken(gift.id, null);
@@ -518,8 +559,18 @@
   byId('add').addEventListener('click', () => openDialog('add'));
   byId('cancel').addEventListener('click', () => { if (!busy) modal.close(); });
   modal.addEventListener('cancel', event => { if (busy) event.preventDefault(); });
-  modal.addEventListener('close', () => { intent = null; });
-  fields.forEach(field => field.addEventListener('input', () => field.setCustomValidity('')));
+  modal.addEventListener('close', () => {
+    intent = null;
+    clearTimeout(previewTimer);
+    byId('photo-preview').replaceChildren();
+    guestName.value = '';
+  });
+  [...fields, guestName].forEach(field => field.addEventListener('input', () => field.setCustomValidity('')));
+  byId('gift-image-url').addEventListener('input', () => {
+    clearTimeout(previewTimer);
+    byId('photo-preview').replaceChildren();
+    previewTimer = setTimeout(showPhotoPreview, 350);
+  });
   byId('dialog-form').addEventListener('submit', event => {
     event.preventDefault();
     if (!intent) return;
