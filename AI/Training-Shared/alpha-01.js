@@ -29,6 +29,57 @@ function hashWrite(){try{history.replaceState(null,'','#day='+(state.day+1)+'&mo
 function dose(x){return x.hold?'1 × 20–40 с + 1 × 30–60 с на бік':`${x.sets} × ${x.reps}${x.unit?' '+x.unit:''}`;}
 function restoreContext(){const log=state.logs[logKey()];if(log&&typeof log.anchor==='boolean')state.anchor=log.anchor;}
 function locationLabel(id){if(state.mode!=='mixed')return '';return ['pull','dips','row2','row3'].includes(id)?' · на майданчику':' · вдома';}
+// Both editions read the same published snapshot. Drafts stay in their original browser stores.
+const resultsURL=new URL('last-results.json',document.currentScript.src);
+const resultsCacheKey='training-alpha01-published-results-v1';
+const resultKeys={row2:'row',row3:'row',bandrow2:'bandrow',bandrow3:'bandrow'};
+let published=null, resultsFailed=false, resultsPending=false, lastResultRequest=0;
+function isSnapshot(data){
+ return data?.version===1 && data.results && typeof data.results==='object' && !Array.isArray(data.results)
+  && Object.values(data.results).every(r=>r && typeof r==='object' && /^\d{4}-\d{2}-\d{2}$/.test(r.date)
+   && (r.reps===null || (typeof r.reps==='string' && r.reps.length>0)));
+}
+try{const cached=JSON.parse(localStorage.getItem(resultsCacheKey));if(isSnapshot(cached))published=cached.results;}catch{}
+function paintPublished(panel){
+ const id=panel.dataset.resultKey, r=published?.[resultKeys[id]||id];
+ panel.classList.toggle('last-result-empty',!r);
+ if(!r){
+  panel.textContent=resultsFailed?'Немає доступного запису для цієї вправи. Онови сторінку, щоб перевірити ще раз.':published?'Для цієї вправи ще немає запису.':'Завантажую останній результат…';
+  return;
+ }
+ const date=r.date.split('-').reverse().join('.');
+ const bandText=typeof r.band==='string'?r.band:(r.band===null||(exercises[id]?.band && !r.load))?'не вказано':'';
+ const details=[bandText?'Резинка: <strong>'+esc(bandText)+'</strong>':'',r.load?esc(r.load):'',r.rir!=null?'RIR: '+esc(r.rir):''].filter(Boolean);
+ panel.innerHTML='<div class="last-result-head"><strong>Останній результат</strong><time datetime="'+esc(r.date)+'">'+esc(date)+'</time>'+(resultsFailed?' <span>· збережена копія</span>':'')+'</div>'
+  +(r.as?'<div class="last-result-variant">Заміна: '+esc(r.as)+'</div>':'')
+  +'<div class="last-result-reps">'+esc(r.reps??'Робочі повторення не записано')+'</div>'
+  +(details.length?'<div class="last-result-details">'+details.map(d=>'<span>'+d+'</span>').join('')+'</div>':'')
+  +(r.note?'<div class="last-result-note">'+esc(r.note)+'</div>':'');
+}
+function mountPublished(){
+ for(const article of $('exercise-list').querySelectorAll('article.exercise')){
+  const panel=document.createElement('div');
+  panel.className='last-result';panel.dataset.resultKey=article.id.slice('exercise-'.length);
+  article.querySelector('.prescription').after(panel);paintPublished(panel);
+ }
+}
+async function refreshPublished(){
+ if(resultsPending || Date.now()-lastResultRequest<60000)return;
+ resultsPending=true;lastResultRequest=Date.now();
+ try{
+  const response=await fetch(resultsURL,{cache:'no-cache',credentials:'omit'});
+  if(!response.ok)throw Error('history');
+  const data=await response.json();
+  if(!isSnapshot(data))throw Error('history format');
+  published=data.results;resultsFailed=false;
+  try{localStorage.setItem(resultsCacheKey,JSON.stringify(data));}catch{}
+ }catch{resultsFailed=true;}
+ finally{
+  resultsPending=false;
+  // A response may arrive while someone is typing. Only replace the reference panels.
+  for(const panel of $('exercise-list').querySelectorAll('[data-result-key]'))paintPublished(panel);
+ }
+}
 function render(){
  const slot=slots[state.day],home=state.mode==='home',mixed=state.mode==='mixed',log=getLog(),ids=getIds();
  document.querySelectorAll('[data-day]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.day)===state.day)));
@@ -48,6 +99,7 @@ function render(){
   const placeholder=x.hold?'Л 30 / 45; П 30 / 45':x.unit?'Л 12 / 12; П 12 / 12':x.sets===3?'12 / 11 / 10':'12 / 12';
   return header+`<article class="exercise ${saved.done?'done':''}" id="exercise-${id}"><div class="exercise-header"><span class="exercise-index">${label}</span><div><h3>${x.name}</h3><div class="exercise-group">${x.group}${locationLabel(id)}</div></div><label class="complete"><input type="checkbox" data-ex="${id}" data-prop="done" ${saved.done?'checked':''} aria-label="Позначити ${x.name}: виконано"><span>Готово</span></label></div><div class="prescription"><div><span class="metric-label">ПІДХОДИ × ПОВТОРЕННЯ</span><span class="metric-value">${x.hold?'1 × 20–40 с<br>1 × 30–60 с':x.sets+' × '+x.reps} <small>${x.unit}</small></span></div><div><span class="metric-label">БЛОК / ПАРА</span><span class="metric-value">${block}а + ${block}б</span></div><div><span class="metric-label">ЗАПАС / ОРІЄНТИР</span><span class="metric-value">${target}</span></div></div><p class="technique">${x.cue}</p><details><summary>Техніка й адаптація</summary><p>${x.detail}</p></details><div class="exercise-log ${x.band?'band-log':''}"><label class="field">Мій результат<input type="text" data-ex="${id}" data-prop="actual" value="${esc(saved.actual)}" placeholder="${placeholder}" aria-label="Результат: ${x.name}"></label><label class="field">${rirLabel}<input type="text" data-ex="${id}" data-prop="rir" value="${esc(saved.rir)}" placeholder="${x.hold?'5 / 5':x.rir==='контроль'?'Чисто':'2 / 2 / 1'}" aria-label="${rirLabel}: ${x.name}"></label>${x.band?`<label class="field setup-field">Резинка / хват / налаштування<input type="text" data-ex="${id}" data-prop="setup" value="${esc(saved.setup)}" placeholder="№, довжина / хват, варіант"></label>`:''}</div></article>`;
  }).join('');
+ mountPublished();
  document.querySelectorAll('[data-field]').forEach(el=>el.value=log[el.dataset.field]||'');
  $('review-notes').value=state.review;$('feedback-output').hidden=true;updateProgress();historyRender();hashWrite();save();
 }
@@ -79,4 +131,6 @@ function resetTimer(seconds=timerPreset){clearInterval(timerInterval);running=fa
 $('timer-duration').addEventListener('change',e=>resetTimer(Number(e.target.value)));
 $('timer-reset').addEventListener('click',()=>resetTimer());
 $('timer-start').addEventListener('click',()=>{if(running){tick();running=false;clearInterval(timerInterval);}else{if(!remaining)remaining=timerPreset;deadline=Date.now()+remaining*1000;running=true;timerInterval=setInterval(tick,250);}timerRender();});document.addEventListener('visibilitychange',tick);
-hashRead();render();timerRender();
+hashRead();render();timerRender();refreshPublished();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshPublished();});
+window.addEventListener('pageshow',e=>{if(e.persisted)refreshPublished();});
